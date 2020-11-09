@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'home.dart';
+import 'homeR.dart';
 import 'login.dart';
 import 'package:flutter/services.dart';
 import 'package:ui_trial/TextToSpeech.dart';
 import 'dart:async';
 
 class SignUpStick extends StatelessWidget {
-
-  TextEditingController sticknameController=new TextEditingController();
-  TextEditingController stickPasswordController=new TextEditingController();
-  TextEditingController stickConfirmPasswordController=new TextEditingController();
+  TextEditingController sticknameController = new TextEditingController();
+  TextEditingController stickPasswordController = new TextEditingController();
+  TextEditingController stickConfirmPasswordController =
+      new TextEditingController();
 
   TextToSpeech tts = new TextToSpeech();
   final timeout = const Duration(seconds: 3);
@@ -55,171 +55,147 @@ class SignUpStick extends StatelessWidget {
         title: 'SignupStick_Trial',
         home: Builder(
             builder: (context) => Scaffold(
-                  backgroundColor: Color(0xFF00B1D2),
-                  appBar: new AppBar(
-                    title: new Text('Set Stick Details'),
-                    backgroundColor: Color(0xFF1C3BC8),
-                  ),
-                  body: GestureDetector(
+                backgroundColor: Color(0xFF00B1D2),
+                appBar: new AppBar(
+                  title: new Text('Set Stick Details'),
+                  backgroundColor: Color(0xFF1C3BC8),
+                ),
+                body: GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    onHorizontalDragEnd: (details){
-                       tts.tellCurrentScreen("Sign up");
+                    onHorizontalDragEnd: (details) {
+                      tts.tellCurrentScreen("Sign up");
                     },
-                    child:      
-                  SingleChildScrollView(
-                    child:
-                       new Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        GestureDetector(
-                          onDoubleTap: (){
-                            if(!sticknameController.text.isEmpty)
-                              tts.promptInput(sticknameController.text); 
-                          },
-                          child:Column(
-                            children:<Widget>[
+                    child: SingleChildScrollView(
+                        child: new Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: <Widget>[
+                          GestureDetector(
+                              onDoubleTap: () {
+                                if (!sticknameController.text.isEmpty)
+                                  tts.promptInput(sticknameController.text);
+                              },
+                              child: Column(children: <Widget>[
                                 new Text(
-                          "Give a name for your stick",
-                          style: new TextStyle(
-                              fontSize: 20.0,
-                              color: const Color(0xFFFFFFFF),
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Roboto"),
-                        ),
-                        new TextField(
-                          controller: sticknameController,
-                          style: new TextStyle(
-                              fontSize: 25.0,
-                              color: const Color(0xFF000000),
-                              fontWeight: FontWeight.w600,
-                              fontFamily: "Roboto"),
-                              onTap: (){
-                                if(sticknameController.text.isEmpty)
-                                tts.promptInput("Enter The name of your stick");
-                              },
-                              onChanged: (value) {
-                                tts.inputPlayback(value);
-                              },
-                        ),
-
-                            ]
-                          )
-                        ),
-
-                        GestureDetector(
-                          onDoubleTap: (){
-                            if(!stickPasswordController.text.isEmpty)
-                              tts.promptInput(stickPasswordController.text); 
-                          },
-                          child: Column(
-                            children:<Widget>[
-                                new Text(
-                          "Give a Password for your stick",
-                          style: new TextStyle(
-                              fontSize: 20.0,
-                              color: const Color(0xFFFFFFFF),
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Roboto"),
-                        ),
-                        new TextField(
-                          obscureText: true,
-                          controller: stickPasswordController,
-                          style: new TextStyle(
-                              fontSize: 25.0,
-                              color: const Color(0xFF000000),
-                              fontWeight: FontWeight.w600,
-                              fontFamily: "Roboto"),
-                              onTap: (){
-                                if(stickPasswordController.text.isEmpty)
-                                tts.promptInput("Enter a password for your stick");
-                              },
-                              onChanged: (value) {
-                                tts.inputPlayback(value);
-                              },
-                        ),
-                        
-                            ]
-                          ),
-                          
-                        ),
-
-                        GestureDetector(
-                          onDoubleTap: (){
-                            if(!stickConfirmPasswordController.text.isEmpty)
-                              tts.promptInput(stickConfirmPasswordController.text); 
-                          },
-                          child: Column(
-                            children:<Widget>[
-                               new Text(
-                          "Confirm Password that you just entered",
-                          style: new TextStyle(
-                              fontSize: 20.0,
-                              color: const Color(0xFFFFFFFF),
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Roboto"),
-                        ),
-                        new TextField(
-                          obscureText: true,
-                          controller: stickConfirmPasswordController,
-                          style: new TextStyle(
-                              fontSize: 25.0,
-                              color: const Color(0xFF000000),
-                              fontWeight: FontWeight.w600,
-                              fontFamily: "Roboto"),
-                               onTap: (){
-                                if(stickConfirmPasswordController.text.isEmpty)
-                                tts.promptInput("Enter the password for your stick again");
-                              },
-                              onChanged: (value) {
-                                tts.inputPlayback(value);
-                              },
-                        ),
-
-                            ]
-                          ),
-
-                        ),
-                      
-                      
-                       
-                        new Padding(
-                          child: new SizedBox(
-                            width: 210.0,
-                            height: 50.0,
-                            child: new RaisedButton(
-                                key: null,
-                                onPressed: () {
-                                  tts.tellPress("SIGN UP");
-                                  _startTimer();
-                                  if (goOrNot(0)) {
-                                    Navigator.pushNamed(context, '/home');
-                                  }
-                                },
-                                color: const Color(0xFF266EC0),
-                                child: new Text(
-                                  "SIGN UP",
+                                  "Give a name for your stick",
                                   style: new TextStyle(
-                                      fontSize: 35.0,
+                                      fontSize: 20.0,
                                       color: const Color(0xFFFFFFFF),
                                       fontWeight: FontWeight.w400,
                                       fontFamily: "Roboto"),
-                                )),
+                                ),
+                                new TextField(
+                                  controller: sticknameController,
+                                  style: new TextStyle(
+                                      fontSize: 25.0,
+                                      color: const Color(0xFF000000),
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: "Roboto"),
+                                  onTap: () {
+                                    if (sticknameController.text.isEmpty)
+                                      tts.promptInput(
+                                          "Enter The name of your stick");
+                                  },
+                                  onChanged: (value) {
+                                    tts.inputPlayback(value);
+                                  },
+                                ),
+                              ])),
+                          GestureDetector(
+                            onDoubleTap: () {
+                              if (!stickPasswordController.text.isEmpty)
+                                tts.promptInput(stickPasswordController.text);
+                            },
+                            child: Column(children: <Widget>[
+                              new Text(
+                                "Give a Password for your stick",
+                                style: new TextStyle(
+                                    fontSize: 20.0,
+                                    color: const Color(0xFFFFFFFF),
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Roboto"),
+                              ),
+                              new TextField(
+                                obscureText: true,
+                                controller: stickPasswordController,
+                                style: new TextStyle(
+                                    fontSize: 25.0,
+                                    color: const Color(0xFF000000),
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: "Roboto"),
+                                onTap: () {
+                                  if (stickPasswordController.text.isEmpty)
+                                    tts.promptInput(
+                                        "Enter a password for your stick");
+                                },
+                                onChanged: (value) {
+                                  tts.inputPlayback(value);
+                                },
+                              ),
+                            ]),
                           ),
-                          padding:
-                              const EdgeInsets.fromLTRB(50.0, 50.0, 50.0, 25.0),
-                        )
-                      ])
-
-                  )
-
-                  )
-                  
-            
-                  
-                  
-               
-                )));
+                          GestureDetector(
+                            onDoubleTap: () {
+                              if (!stickConfirmPasswordController.text.isEmpty)
+                                tts.promptInput(
+                                    stickConfirmPasswordController.text);
+                            },
+                            child: Column(children: <Widget>[
+                              new Text(
+                                "Confirm Password that you just entered",
+                                style: new TextStyle(
+                                    fontSize: 20.0,
+                                    color: const Color(0xFFFFFFFF),
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Roboto"),
+                              ),
+                              new TextField(
+                                obscureText: true,
+                                controller: stickConfirmPasswordController,
+                                style: new TextStyle(
+                                    fontSize: 25.0,
+                                    color: const Color(0xFF000000),
+                                    fontWeight: FontWeight.w600,
+                                    fontFamily: "Roboto"),
+                                onTap: () {
+                                  if (stickConfirmPasswordController
+                                      .text.isEmpty)
+                                    tts.promptInput(
+                                        "Enter the password for your stick again");
+                                },
+                                onChanged: (value) {
+                                  tts.inputPlayback(value);
+                                },
+                              ),
+                            ]),
+                          ),
+                          new Padding(
+                            child: new SizedBox(
+                              width: 210.0,
+                              height: 50.0,
+                              child: new RaisedButton(
+                                  key: null,
+                                  onPressed: () {
+                                    tts.tellPress("SIGN UP");
+                                    _startTimer();
+                                    if (goOrNot(0)) {
+                                      Navigator.pushNamed(context, '/home');
+                                    }
+                                  },
+                                  color: const Color(0xFF266EC0),
+                                  child: new Text(
+                                    "SIGN UP",
+                                    style: new TextStyle(
+                                        fontSize: 35.0,
+                                        color: const Color(0xFFFFFFFF),
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: "Roboto"),
+                                  )),
+                            ),
+                            padding: const EdgeInsets.fromLTRB(
+                                50.0, 50.0, 50.0, 25.0),
+                          )
+                        ]))))));
   }
 }

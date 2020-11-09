@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ui_trial/initialisationR.dart';
-import 'homeR.dart';
 import 'package:flutter/services.dart';
 import 'package:ui_trial/TextToSpeech.dart';
 import 'dart:async';
+import 'Size_Config.dart';
 
-class SaveFaces extends StatelessWidget {
+class SaveFaces extends StatefulWidget {
+  @override
+  _SaveFacesState createState() => _SaveFacesState();
+}
+
+class _SaveFacesState extends State<SaveFaces> {
   TextToSpeech tts = new TextToSpeech();
   final timeout = const Duration(seconds: 3);
 
@@ -61,32 +66,35 @@ class SaveFaces extends StatelessWidget {
                   title: new Text('Save Faces'),
                   backgroundColor: Color(0xFF1C3BC8),
                 ),
-                body: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onHorizontalDragEnd: (details) {
-                      tts.tellCurrentScreen("Save Faces");
-                    },
-                    child: new Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: <Widget>[
-                          new RaisedButton(
-                              key: null,
-                              onPressed: () {
-                                tts.tellPress("SAVE FACES");
-                                _startTimer();
-                                if (goOrNot(0)) {}
-                              },
-                              color: const Color(0xFF266EC0),
-                              child: new Text(
-                                "SAVE FACES",
-                                style: new TextStyle(
-                                    fontSize: 50.0,
-                                    color: const Color(0xFFFFFFFF),
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: "Roboto"),
-                              )),
-                        ])))));
+                body: Column(children: <Widget>[
+                  SizedBox(
+                    height: SizeConfig.safeBlockVertical * 2,
+                    width: SizeConfig.safeBlockHorizontal * 100,
+                  ),
+                  Container(
+                    height: SizeConfig.safeBlockVertical * 18 - 12.58,
+                    width: SizeConfig.safeBlockHorizontal * 100,
+                    child: RaisedButton(
+                        key: null,
+                        onPressed: () {
+                          tts.tellPress("SAVE FACES");
+                          _startTimer();
+                          if (goOrNot(0)) {}
+                        },
+                        color: const Color(0xFF266EC0),
+                        child: new Text(
+                          "SAVE FACES",
+                          style: new TextStyle(
+                              fontSize: 50.0,
+                              color: const Color(0xFFFFFFFF),
+                              fontWeight: FontWeight.w400,
+                              fontFamily: "Roboto"),
+                        )),
+                  ),
+                  SizedBox(
+                    height: SizeConfig.safeBlockVertical * 2,
+                    width: SizeConfig.safeBlockHorizontal * 100,
+                  ),
+                ]))));
   }
 }

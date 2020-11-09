@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:ui_trial/SignUpStick.dart';
-import 'package:ui_trial/SignUpUser.dart';
-import 'package:ui_trial/mute.dart';
+import 'initialisationR.dart';
+import 'saveContactsR.dart';
+import 'homeR.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,6 +10,6 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SignUpUser();
+    return Home();
   }
 }
