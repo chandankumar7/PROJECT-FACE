@@ -70,114 +70,115 @@ class _SaveMessagesState extends State<SaveMessages> {
                   title: new Text('Save Message'),
                   backgroundColor: Color(0xFF1C3BC8),
                 ),
-                body: Column(children: <Widget>[
-                  SizedBox(
-                    height: SizeConfig.safeBlockVertical * 2,
-                    width: SizeConfig.safeBlockHorizontal * 100,
-                  ),
-                  Container(
-                    height: SizeConfig.safeBlockVertical * 18 - 12.58,
-                    width: SizeConfig.safeBlockHorizontal * 100,
-                    child: RaisedButton(
-                        key: null,
-                        onPressed: () {
-                          tts.tellPress("RECORD S O S MESSAGE");
-                          _startTimer();
-                          if (goOrNot(0)) {}
-                        },
-                        padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
-                        color: const Color(0xFF266EC0),
-                        child: new Text(
-                          "RECORD SOS MESSAGE",
-                          textAlign: TextAlign.center,
-                          style: new TextStyle(
-                              fontSize: 29.0,
-                              color: const Color(0xFFFFFFFF),
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Roboto"),
-                        )),
-                  ),
-                  SizedBox(
-                    height: SizeConfig.safeBlockVertical * 2,
-                    width: SizeConfig.safeBlockHorizontal * 100,
-                  ),
-                  Container(
-                    height: SizeConfig.safeBlockVertical * 18 - 12.58,
-                    width: SizeConfig.safeBlockHorizontal * 100,
-                    child: RaisedButton(
-                        key: null,
-                        onPressed: () {
-                          tts.tellPress("RECITE S O S MESSAGE");
-                          _startTimer();
-                          if (goOrNot(1)) {}
-                        },
-                        padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
-                        color: const Color(0xFF266EC0),
-                        child: new Text(
-                          "RECITE SOS MESSAGE",
-                          textAlign: TextAlign.center,
-                          style: new TextStyle(
-                              fontSize: 29.0,
-                              color: const Color(0xFFFFFFFF),
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Roboto"),
-                        )),
-                  ),
-                  SizedBox(
-                    height: SizeConfig.safeBlockVertical * 2,
-                    width: SizeConfig.safeBlockHorizontal * 100,
-                  ),
-                  Container(
-                    height: SizeConfig.safeBlockVertical * 18 - 12.58,
-                    width: SizeConfig.safeBlockHorizontal * 100,
-                    child: RaisedButton(
-                        key: null,
-                        onPressed: () {
-                          tts.tellPress("RECORD USER FALL MESSAGE");
-                          _startTimer();
-                          if (goOrNot(2)) {}
-                        },
-                        padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
-                        color: const Color(0xFF266EC0),
-                        child: new Text(
-                          "RECORD USER - FALL MESSAGE",
-                          textAlign: TextAlign.center,
-                          style: new TextStyle(
-                              fontSize: 29.0,
-                              color: const Color(0xFFFFFFFF),
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Roboto"),
-                        )),
-                  ),
-                  SizedBox(
-                    height: SizeConfig.safeBlockVertical * 2,
-                    width: SizeConfig.safeBlockHorizontal * 100,
-                  ),
-                  Container(
-                      height: SizeConfig.safeBlockVertical * 18 - 12.58,
-                      width: SizeConfig.safeBlockHorizontal * 100,
-                      child: RaisedButton(
-                          key: null,
-                          onPressed: () {
-                            tts.tellPress("RECITE USER FALL MESSAGE");
-                            _startTimer();
-                            if (goOrNot(3)) {}
-                          },
-                          padding: EdgeInsets.fromLTRB(30, 30, 30, 30),
-                          color: const Color(0xFF266EC0),
-                          child: new Text(
-                            "RECITE USER - FALL MESSAGE",
-                            textAlign: TextAlign.center,
-                            style: new TextStyle(
-                                fontSize: 29.0,
-                                color: const Color(0xFFFFFFFF),
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "Roboto"),
-                          ))),
-                  SizedBox(
-                    height: SizeConfig.safeBlockVertical * 2,
-                    width: SizeConfig.safeBlockHorizontal * 100,
-                  ),
-                ]))));
+                body: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onHorizontalDragEnd: (details) {
+                      tts.tellCurrentScreen("Save Messages");
+                    },
+                    child: Column(children: <Widget>[
+                      SizedBox(
+                        height: SizeConfig.safeBlockVertical * 2,
+                        width: SizeConfig.safeBlockHorizontal * 100,
+                      ),
+                      Container(
+                        height: SizeConfig.safeBlockVertical * 18 - 12.58,
+                        width: SizeConfig.safeBlockHorizontal * 100,
+                        child: RaisedButton(
+                            key: null,
+                            onPressed: () {
+                              tts.tellPress("RECORD S O S MESSAGE");
+                              _startTimer();
+                              if (goOrNot(0)) {}
+                            },
+                            color: const Color(0xFF266EC0),
+                            child: new Text(
+                              "RECORD SOS MESSAGE",
+                              textAlign: TextAlign.center,
+                              style: new TextStyle(
+                                  fontSize: 29.0,
+                                  color: const Color(0xFFFFFFFF),
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Roboto"),
+                            )),
+                      ),
+                      SizedBox(
+                        height: SizeConfig.safeBlockVertical * 2,
+                        width: SizeConfig.safeBlockHorizontal * 100,
+                      ),
+                      Container(
+                        height: SizeConfig.safeBlockVertical * 18 - 12.58,
+                        width: SizeConfig.safeBlockHorizontal * 100,
+                        child: RaisedButton(
+                            key: null,
+                            onPressed: () {
+                              tts.tellPress("RECITE S O S MESSAGE");
+                              _startTimer();
+                              if (goOrNot(1)) {}
+                            },
+                            color: const Color(0xFF266EC0),
+                            child: new Text(
+                              "RECITE SOS MESSAGE",
+                              textAlign: TextAlign.center,
+                              style: new TextStyle(
+                                  fontSize: 29.0,
+                                  color: const Color(0xFFFFFFFF),
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Roboto"),
+                            )),
+                      ),
+                      SizedBox(
+                        height: SizeConfig.safeBlockVertical * 2,
+                        width: SizeConfig.safeBlockHorizontal * 100,
+                      ),
+                      Container(
+                        height: SizeConfig.safeBlockVertical * 18 - 12.58,
+                        width: SizeConfig.safeBlockHorizontal * 100,
+                        child: RaisedButton(
+                            key: null,
+                            onPressed: () {
+                              tts.tellPress("RECORD USER FALL MESSAGE");
+                              _startTimer();
+                              if (goOrNot(2)) {}
+                            },
+                            color: const Color(0xFF266EC0),
+                            child: new Text(
+                              "RECORD USER - FALL MESSAGE",
+                              textAlign: TextAlign.center,
+                              style: new TextStyle(
+                                  fontSize: 29.0,
+                                  color: const Color(0xFFFFFFFF),
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Roboto"),
+                            )),
+                      ),
+                      SizedBox(
+                        height: SizeConfig.safeBlockVertical * 2,
+                        width: SizeConfig.safeBlockHorizontal * 100,
+                      ),
+                      Container(
+                          height: SizeConfig.safeBlockVertical * 18 - 12.58,
+                          width: SizeConfig.safeBlockHorizontal * 100,
+                          child: RaisedButton(
+                              key: null,
+                              onPressed: () {
+                                tts.tellPress("RECITE USER FALL MESSAGE");
+                                _startTimer();
+                                if (goOrNot(3)) {}
+                              },
+                              color: const Color(0xFF266EC0),
+                              child: new Text(
+                                "RECITE USER - FALL MESSAGE",
+                                textAlign: TextAlign.center,
+                                style: new TextStyle(
+                                    fontSize: 29.0,
+                                    color: const Color(0xFFFFFFFF),
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Roboto"),
+                              ))),
+                      SizedBox(
+                        height: SizeConfig.safeBlockVertical * 2,
+                        width: SizeConfig.safeBlockHorizontal * 100,
+                      ),
+                    ])))));
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:ui_trial/TextToSpeech.dart';
 import 'dart:async';
 import 'Size_Config.dart';
+import 'homeR.dart';
 
 class SaveFaces extends StatefulWidget {
   @override
@@ -52,7 +53,7 @@ class _SaveFacesState extends State<SaveFaces> {
     ]);
     tts.tellCurrentScreen("Save Faces");
     return MaterialApp(
-        routes: {'/initialisation': (context) => Initialisation()},
+        routes: {'/home': (context) => Home()},
         title: 'SaveFaces_trial',
         home: Builder(
             builder: (context) => Scaffold(
@@ -60,41 +61,45 @@ class _SaveFacesState extends State<SaveFaces> {
                 appBar: new AppBar(
                   leading: IconButton(
                     icon: Icon(Icons.arrow_back_rounded, color: Colors.white),
-                    onPressed: () =>
-                        Navigator.pushNamed(context, '/initialisation'),
+                    onPressed: () => Navigator.pushNamed(context, '/home'),
                   ),
                   title: new Text('Save Faces'),
                   backgroundColor: Color(0xFF1C3BC8),
                 ),
-                body: Column(children: <Widget>[
-                  SizedBox(
-                    height: SizeConfig.safeBlockVertical * 2,
-                    width: SizeConfig.safeBlockHorizontal * 100,
-                  ),
-                  Container(
-                    height: SizeConfig.safeBlockVertical * 18 - 12.58,
-                    width: SizeConfig.safeBlockHorizontal * 100,
-                    child: RaisedButton(
-                        key: null,
-                        onPressed: () {
-                          tts.tellPress("SAVE FACES");
-                          _startTimer();
-                          if (goOrNot(0)) {}
-                        },
-                        color: const Color(0xFF266EC0),
-                        child: new Text(
-                          "SAVE FACES",
-                          style: new TextStyle(
-                              fontSize: 50.0,
-                              color: const Color(0xFFFFFFFF),
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Roboto"),
-                        )),
-                  ),
-                  SizedBox(
-                    height: SizeConfig.safeBlockVertical * 2,
-                    width: SizeConfig.safeBlockHorizontal * 100,
-                  ),
-                ]))));
+                body: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onHorizontalDragEnd: (details) {
+                      tts.tellCurrentScreen("Save Faces");
+                    },
+                    child: Column(children: <Widget>[
+                      SizedBox(
+                        height: SizeConfig.safeBlockVertical * 2,
+                        width: SizeConfig.safeBlockHorizontal * 100,
+                      ),
+                      Container(
+                        height: SizeConfig.safeBlockVertical * 18 - 12.58,
+                        width: SizeConfig.safeBlockHorizontal * 100,
+                        child: RaisedButton(
+                            key: null,
+                            onPressed: () {
+                              tts.tellPress("SAVE FACES");
+                              _startTimer();
+                              if (goOrNot(0)) {}
+                            },
+                            color: const Color(0xFF266EC0),
+                            child: new Text(
+                              "SAVE FACES",
+                              style: new TextStyle(
+                                  fontSize: 50.0,
+                                  color: const Color(0xFFFFFFFF),
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: "Roboto"),
+                            )),
+                      ),
+                      SizedBox(
+                        height: SizeConfig.safeBlockVertical * 2,
+                        width: SizeConfig.safeBlockHorizontal * 100,
+                      ),
+                    ])))));
   }
 }

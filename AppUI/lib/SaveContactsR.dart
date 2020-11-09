@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ui_trial/initialisationR.dart';
 import 'package:flutter/services.dart';
 import 'package:ui_trial/TextToSpeech.dart';
 import 'dart:async';
 import 'Size_Config.dart';
+import 'homeR.dart';
 
 class SaveContacts extends StatefulWidget {
   @override
@@ -51,96 +51,100 @@ class _SaveContactsState extends State<SaveContacts> {
     ]);
     tts.tellCurrentScreen("Save Contacts");
     return MaterialApp(
-        routes: {'/initialisation': (context) => Initialisation()},
+        routes: {'/home': (context) => Home()},
         title: 'SaveContacts_trial',
         home: new Scaffold(
             backgroundColor: Color(0xFF00B1D2),
             appBar: new AppBar(
               leading: IconButton(
                 icon: Icon(Icons.arrow_back_rounded, color: Colors.white),
-                onPressed: () =>
-                    Navigator.pushNamed(context, '/initialisation'),
+                onPressed: () => Navigator.pushNamed(context, '/home'),
               ),
               title: new Text('Save Contacts'),
               backgroundColor: Color(0xFF1C3BC8),
             ),
-            body: Column(children: <Widget>[
-              SizedBox(
-                height: (SizeConfig.safeBlockVertical * 2),
-                width: SizeConfig.safeBlockHorizontal * 100,
-              ),
-              Container(
-                height: SizeConfig.safeBlockVertical * 18 - 12.58,
-                width: SizeConfig.safeBlockHorizontal * 100,
-                child: RaisedButton(
-                    key: null,
-                    onPressed: () {
-                      tts.tellPress("SAVE CONTACT 1");
-                      _startTimer();
-                      if (goOrNot(0)) {}
-                    },
-                    color: const Color(0xFF266EC0),
-                    child: new Text(
-                      "SAVE CONTACT 1",
-                      style: new TextStyle(
-                          fontSize: 36.0,
-                          color: const Color(0xFFFFFFFF),
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Roboto"),
-                    )),
-              ),
-              SizedBox(
-                height: (SizeConfig.safeBlockVertical * 2),
-                width: SizeConfig.safeBlockHorizontal * 100,
-              ),
-              Container(
-                height: SizeConfig.safeBlockVertical * 18 - 12.58,
-                width: SizeConfig.safeBlockHorizontal * 100,
-                child: RaisedButton(
-                    key: null,
-                    onPressed: () {
-                      tts.tellPress("SAVE CONTACT 2");
-                      _startTimer();
-                      if (goOrNot(1)) {}
-                    },
-                    color: const Color(0xFF266EC0),
-                    child: new Text(
-                      "SAVE CONTACT 2",
-                      style: new TextStyle(
-                          fontSize: 36.0,
-                          color: const Color(0xFFFFFFFF),
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Roboto"),
-                    )),
-              ),
-              SizedBox(
-                height: (SizeConfig.safeBlockVertical * 2),
-                width: SizeConfig.safeBlockHorizontal * 100,
-              ),
-              Container(
-                height: SizeConfig.safeBlockVertical * 18 - 12.58,
-                width: SizeConfig.safeBlockHorizontal * 100,
-                child: RaisedButton(
-                    key: null,
-                    onPressed: () {
-                      tts.tellPress("SAVE CONTACT 3");
-                      _startTimer();
-                      if (goOrNot(2)) {}
-                    },
-                    color: const Color(0xFF266EC0),
-                    child: new Text(
-                      "SAVE CONTACT 3",
-                      style: new TextStyle(
-                          fontSize: 36.0,
-                          color: const Color(0xFFFFFFFF),
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Roboto"),
-                    )),
-              ),
-              SizedBox(
-                height: (SizeConfig.safeBlockVertical * 2),
-                width: SizeConfig.safeBlockHorizontal * 100,
-              ),
-            ])));
+            body: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onHorizontalDragEnd: (details) {
+                  tts.tellCurrentScreen("Save Contacts");
+                },
+                child: Column(children: <Widget>[
+                  SizedBox(
+                    height: (SizeConfig.safeBlockVertical * 2),
+                    width: SizeConfig.safeBlockHorizontal * 100,
+                  ),
+                  Container(
+                    height: SizeConfig.safeBlockVertical * 18 - 12.58,
+                    width: SizeConfig.safeBlockHorizontal * 100,
+                    child: RaisedButton(
+                        key: null,
+                        onPressed: () {
+                          tts.tellPress("SAVE CONTACT 1");
+                          _startTimer();
+                          if (goOrNot(0)) {}
+                        },
+                        color: const Color(0xFF266EC0),
+                        child: new Text(
+                          "SAVE CONTACT 1",
+                          style: new TextStyle(
+                              fontSize: 36.0,
+                              color: const Color(0xFFFFFFFF),
+                              fontWeight: FontWeight.w400,
+                              fontFamily: "Roboto"),
+                        )),
+                  ),
+                  SizedBox(
+                    height: (SizeConfig.safeBlockVertical * 2),
+                    width: SizeConfig.safeBlockHorizontal * 100,
+                  ),
+                  Container(
+                    height: SizeConfig.safeBlockVertical * 18 - 12.58,
+                    width: SizeConfig.safeBlockHorizontal * 100,
+                    child: RaisedButton(
+                        key: null,
+                        onPressed: () {
+                          tts.tellPress("SAVE CONTACT 2");
+                          _startTimer();
+                          if (goOrNot(1)) {}
+                        },
+                        color: const Color(0xFF266EC0),
+                        child: new Text(
+                          "SAVE CONTACT 2",
+                          style: new TextStyle(
+                              fontSize: 36.0,
+                              color: const Color(0xFFFFFFFF),
+                              fontWeight: FontWeight.w400,
+                              fontFamily: "Roboto"),
+                        )),
+                  ),
+                  SizedBox(
+                    height: (SizeConfig.safeBlockVertical * 2),
+                    width: SizeConfig.safeBlockHorizontal * 100,
+                  ),
+                  Container(
+                    height: SizeConfig.safeBlockVertical * 18 - 12.58,
+                    width: SizeConfig.safeBlockHorizontal * 100,
+                    child: RaisedButton(
+                        key: null,
+                        onPressed: () {
+                          tts.tellPress("SAVE CONTACT 3");
+                          _startTimer();
+                          if (goOrNot(2)) {}
+                        },
+                        color: const Color(0xFF266EC0),
+                        child: new Text(
+                          "SAVE CONTACT 3",
+                          style: new TextStyle(
+                              fontSize: 36.0,
+                              color: const Color(0xFFFFFFFF),
+                              fontWeight: FontWeight.w400,
+                              fontFamily: "Roboto"),
+                        )),
+                  ),
+                  SizedBox(
+                    height: (SizeConfig.safeBlockVertical * 2),
+                    width: SizeConfig.safeBlockHorizontal * 100,
+                  ),
+                ]))));
   }
 }

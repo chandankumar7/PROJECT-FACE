@@ -3,7 +3,7 @@ import 'TextToSpeech.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ui_trial/initialisationR.dart';
-import 'mute.dart';
+import 'muteR.dart';
 import 'dart:async';
 
 class Home extends StatefulWidget {
@@ -66,119 +66,127 @@ class _HomeState extends State<Home> {
         title: "home_trial",
         home: Builder(
             builder: (context) => Scaffold(
-                appBar: AppBar(),
-                body: Column(children: <Widget>[
-                  Container(
-                    height: SizeConfig.safeBlockVertical * 49.5 - 28,
-                    width: SizeConfig.safeBlockHorizontal * 100,
-                    color: Colors.white,
-                    child: Row(children: <Widget>[
-                      Container(
+                appBar: AppBar(
+                  title: Text("360 VPA"),
+                ),
+                body: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onHorizontalDragEnd: (details) {
+                    tts.tellCurrentScreen("Home");
+                  },
+                  child: Column(children: <Widget>[
+                    Container(
+                      height: SizeConfig.safeBlockVertical * 49.5 - 28,
+                      width: SizeConfig.safeBlockHorizontal * 100,
+                      color: Colors.white,
+                      child: Row(children: <Widget>[
+                        Container(
+                            height: SizeConfig.safeBlockVertical * 49.5 - 28,
+                            width: SizeConfig.safeBlockHorizontal * 49,
+                            color: Colors.purple,
+                            child: new RaisedButton(
+                                key: null,
+                                onPressed: () {
+                                  tts.tellPress("SEND  S O S");
+                                  _startTimer();
+                                  if (goOrNot(0)) {}
+                                },
+                                color: const Color(0xFF266EC0),
+                                child: new Text(
+                                  "SEND SOS",
+                                  style: new TextStyle(
+                                      fontSize: 21.0,
+                                      color: const Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: "Roboto"),
+                                ))),
+                        SizedBox(
                           height: SizeConfig.safeBlockVertical * 49.5 - 28,
-                          width: SizeConfig.safeBlockHorizontal * 49,
-                          color: Colors.purple,
-                          child: new RaisedButton(
-                              key: null,
-                              onPressed: () {
-                                tts.tellPress("SEND  S O S");
-                                _startTimer();
-                                if (goOrNot(0)) {}
-                              },
-                              color: const Color(0xFF266EC0),
-                              child: new Text(
-                                "SEND SOS",
-                                style: new TextStyle(
-                                    fontSize: 21.0,
-                                    color: const Color(0xFFFFFFFF),
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: "Roboto"),
-                              ))),
-                      SizedBox(
-                        height: SizeConfig.safeBlockVertical * 49.5 - 28,
-                        width: SizeConfig.safeBlockHorizontal * 2,
-                      ),
-                      Container(
+                          width: SizeConfig.safeBlockHorizontal * 2,
+                        ),
+                        Container(
+                            height: SizeConfig.safeBlockVertical * 49.5 - 28,
+                            width: SizeConfig.safeBlockHorizontal * 49,
+                            color: Colors.purple,
+                            child: RaisedButton(
+                                key: null,
+                                onPressed: () {
+                                  tts.tellPress("Mute");
+                                  _startTimer();
+                                  if (goOrNot(1)) {
+                                    Navigator.pushNamed(context, '/mute');
+                                  }
+                                },
+                                color: const Color(0xFF00B1D2),
+                                child: new Text(
+                                  "MUTE AUDIO",
+                                  style: new TextStyle(
+                                      fontSize: 21.0,
+                                      color: const Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: "Roboto"),
+                                )))
+                      ]),
+                    ),
+                    SizedBox(
+                        height: SizeConfig.safeBlockVertical * 1,
+                        width: SizeConfig.safeBlockHorizontal * 100),
+                    Container(
+                      height: SizeConfig.safeBlockVertical * 49.5 - 28,
+                      width: SizeConfig.safeBlockHorizontal * 100,
+                      color: Colors.white,
+                      child: Row(children: <Widget>[
+                        Container(
                           height: SizeConfig.safeBlockVertical * 49.5 - 28,
                           width: SizeConfig.safeBlockHorizontal * 49,
                           color: Colors.purple,
                           child: RaisedButton(
                               key: null,
                               onPressed: () {
-                                tts.tellPress("Mute");
+                                tts.tellPress("Navigation");
                                 _startTimer();
-                                if (goOrNot(1)) {
-                                  Navigator.pushNamed(context, '/mute');
-                                }
+                                if (goOrNot(3)) {}
                               },
                               color: const Color(0xFF00B1D2),
                               child: new Text(
-                                "MUTE AUDIO",
+                                "NAVIGATION",
                                 style: new TextStyle(
                                     fontSize: 21.0,
                                     color: const Color(0xFFFFFFFF),
                                     fontWeight: FontWeight.w400,
                                     fontFamily: "Roboto"),
-                              )))
-                    ]),
-                  ),
-                  SizedBox(
-                      height: SizeConfig.safeBlockVertical * 1,
-                      width: SizeConfig.safeBlockHorizontal * 100),
-                  Container(
-                    height: SizeConfig.safeBlockVertical * 49.5 - 28,
-                    width: SizeConfig.safeBlockHorizontal * 100,
-                    color: Colors.white,
-                    child: Row(children: <Widget>[
-                      Container(
-                        height: SizeConfig.safeBlockVertical * 49.5 - 28,
-                        width: SizeConfig.safeBlockHorizontal * 49,
-                        color: Colors.purple,
-                        child: RaisedButton(
-                            key: null,
-                            onPressed: () {
-                              tts.tellPress("Navigation");
-                              _startTimer();
-                              if (goOrNot(3)) {}
-                            },
-                            color: const Color(0xFF00B1D2),
-                            child: new Text(
-                              "NAVIGATION",
-                              style: new TextStyle(
-                                  fontSize: 21.0,
-                                  color: const Color(0xFFFFFFFF),
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: "Roboto"),
-                            )),
-                      ),
-                      SizedBox(
-                        height: SizeConfig.safeBlockVertical * 49.5 - 28,
-                        width: SizeConfig.safeBlockHorizontal * 2,
-                      ),
-                      Container(
+                              )),
+                        ),
+                        SizedBox(
                           height: SizeConfig.safeBlockVertical * 49.5 - 28,
-                          width: SizeConfig.safeBlockHorizontal * 49,
-                          color: Colors.purple,
-                          child: RaisedButton(
-                              key: null,
-                              onPressed: () {
-                                tts.tellPress("Initialisation");
-                                _startTimer();
-                                if (goOrNot(2)) {
-                                  Navigator.pushNamed(
-                                      context, '/initialisation');
-                                }
-                              },
-                              color: const Color(0xFF266EC0),
-                              child: new Text(
-                                "INITIALISATION",
-                                style: new TextStyle(
-                                    fontSize: 20.0,
-                                    color: const Color(0xFFFFFFFF),
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: "Roboto"),
-                              )))
-                    ]),
-                  )
-                ]))));
+                          width: SizeConfig.safeBlockHorizontal * 2,
+                        ),
+                        Container(
+                            height: SizeConfig.safeBlockVertical * 49.5 - 28,
+                            width: SizeConfig.safeBlockHorizontal * 49,
+                            color: Colors.purple,
+                            child: RaisedButton(
+                                key: null,
+                                onPressed: () {
+                                  tts.tellPress("Initialisation");
+                                  _startTimer();
+                                  if (goOrNot(2)) {
+                                    Navigator.pushNamed(
+                                        context, '/initialisation');
+                                  }
+                                },
+                                color: const Color(0xFF266EC0),
+                                child: new Text(
+                                  "INITIALISATION",
+                                  style: new TextStyle(
+                                      fontSize: 20.0,
+                                      color: const Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: "Roboto"),
+                                )))
+                      ]),
+                    )
+                  ]),
+                ))));
   }
 }
