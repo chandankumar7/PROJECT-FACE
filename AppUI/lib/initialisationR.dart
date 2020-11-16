@@ -1,19 +1,31 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ui_trial/SaveMessagesR.dart';
 import 'package:ui_trial/saveContactsR.dart';
-import 'package:ui_trial/saveFacesR.dart';
 import 'dart:async';
+import 'SaveFacesR.dart';
 import 'homeR.dart';
 import 'package:ui_trial/TextToSpeech.dart';
 import 'Size_Config.dart';
+import 'dart:io' as io;
+
+
+
 
 class Initialisation extends StatefulWidget {
+  io.File jsonFile;
+  Initialisation({this.jsonFile});
   @override
-  _InitialisationState createState() => _InitialisationState();
+  _InitialisationState createState() => _InitialisationState(this.jsonFile);
 }
 
 class _InitialisationState extends State<Initialisation> {
+
+  io.File jsonFile;
+  _InitialisationState(this.jsonFile);
+
   TextToSpeech tts = new TextToSpeech();
 
   final timeout = const Duration(seconds: 3);
@@ -63,7 +75,7 @@ class _InitialisationState extends State<Initialisation> {
         routes: {
           '/home': (context) => Home(),
           '/SaveContacts': (context) => SaveContacts(),
-          '/SaveFaces': (context) => SaveFaces(),
+          '/SaveFaces': (context) => SaveFaces(jsonFile:jsonFile),
           '/SaveSos': (context) => SaveMessages()
         },
         title: 'initialisation_trial',

@@ -5,13 +5,21 @@ import 'package:flutter/services.dart';
 import 'package:ui_trial/initialisationR.dart';
 import 'muteR.dart';
 import 'dart:async';
+import 'dart:io' as io;
 
 class Home extends StatefulWidget {
+
+  io.File jsonFile;
+  Home({this.jsonFile});
   @override
-  _HomeState createState() => _HomeState();
+  _HomeState createState() => _HomeState(this.jsonFile);
 }
 
 class _HomeState extends State<Home> {
+
+  io.File jsonFile;
+  _HomeState(this.jsonFile);
+
   TextToSpeech tts = new TextToSpeech();
   final timeout = const Duration(seconds: 3);
 
@@ -61,7 +69,7 @@ class _HomeState extends State<Home> {
     return MaterialApp(
         routes: {
           '/mute': (context) => Mute(),
-          '/initialisation': (context) => Initialisation()
+          '/initialisation': (context) => Initialisation(jsonFile:jsonFile)
         },
         title: "home_trial",
         home: Builder(
