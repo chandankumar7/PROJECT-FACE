@@ -214,24 +214,28 @@ class SignUpUser extends StatelessWidget {
                               width: 210.0,
                               height: 50.0,
                               child: new RaisedButton(
-                                  key: null,
-                                  onPressed: () {
-                                    tts.tellPress("SIGN UP");
-                                    _startTimer();
-                                    if (goOrNot(0)) {
-                                      Navigator.pushNamed(
-                                          context, '/SignUpStick');
-                                    }
-                                  },
-                                  color: const Color(0xFF266EC0),
-                                  child: new Text(
-                                    "SIGN UP",
-                                    style: new TextStyle(
-                                        fontSize: 35.0,
-                                        color: const Color(0xFFFFFFFF),
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: "Roboto"),
-                                  )),
+                                key: null,
+                                onPressed: () {
+                                  tts.tellPress("SIGN UP");
+                                  _startTimer();
+                                  if (goOrNot(0)) {
+                                    Navigator.pushNamed(
+                                        context, '/SignUpStick');
+                                  }
+                                },
+                                color: const Color(0xFF266EC0),
+                                child: new Text(
+                                  "SIGN UP",
+                                  style: new TextStyle(
+                                      fontSize: 35.0,
+                                      color: const Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: "Roboto"),
+                                ),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(40.0))),
+                              ),
                             ),
                             padding: const EdgeInsets.fromLTRB(
                                 50.0, 50.0, 50.0, 25.0),
@@ -241,23 +245,27 @@ class SignUpUser extends StatelessWidget {
                               width: 210.0,
                               height: 50.0,
                               child: new RaisedButton(
-                                  key: null,
-                                  onPressed: () {
-                                    tts.tellPress("LOGIN");
-                                    _startTimer();
-                                    if (goOrNot(0)) {
-                                      Navigator.pushNamed(context, '/login');
-                                    }
-                                  },
-                                  color: const Color(0xFF266EC0),
-                                  child: new Text(
-                                    "LOGIN",
-                                    style: new TextStyle(
-                                        fontSize: 35.0,
-                                        color: const Color(0xFFFFFFFF),
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: "Roboto"),
-                                  )),
+                                key: null,
+                                onPressed: () {
+                                  tts.tellPress("LOGIN");
+                                  _startTimer();
+                                  if (goOrNot(0)) {
+                                    Navigator.pushNamed(context, '/login');
+                                  }
+                                },
+                                color: const Color(0xFF266EC0),
+                                child: new Text(
+                                  "LOGIN",
+                                  style: new TextStyle(
+                                      fontSize: 35.0,
+                                      color: const Color(0xFFFFFFFF),
+                                      fontWeight: FontWeight.w400,
+                                      fontFamily: "Roboto"),
+                                ),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(40.0))),
+                              ),
                             ),
                             padding: const EdgeInsets.fromLTRB(
                                 50.0, 50.0, 50.0, 25.0),
