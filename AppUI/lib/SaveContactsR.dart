@@ -77,21 +77,25 @@ class _SaveContactsState extends State<SaveContacts> {
                     height: SizeConfig.safeBlockVertical * 18 - 12.58,
                     width: SizeConfig.safeBlockHorizontal * 100,
                     child: RaisedButton(
-                        key: null,
-                        onPressed: () {
-                          tts.tellPress("SAVE CONTACT 1");
-                          _startTimer();
-                          if (goOrNot(0)) {}
-                        },
-                        color: const Color(0xFF266EC0),
-                        child: new Text(
-                          "SAVE CONTACT 1",
-                          style: new TextStyle(
-                              fontSize: 36.0,
-                              color: const Color(0xFFFFFFFF),
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Roboto"),
-                        )),
+                      key: null,
+                      onPressed: () {
+                        tts.tellPress("SAVE CONTACT 1");
+                        _startTimer();
+                        if (goOrNot(0)) {}
+                      },
+                      color: const Color(0xFF266EC0),
+                      child: new Text(
+                        "SAVE CONTACT 1",
+                        style: new TextStyle(
+                            fontSize: 36.0,
+                            color: const Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.w400,
+                            fontFamily: "Roboto"),
+                      ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(40.0))),
+                    ),
                   ),
                   SizedBox(
                     height: (SizeConfig.safeBlockVertical * 2),
@@ -101,21 +105,25 @@ class _SaveContactsState extends State<SaveContacts> {
                     height: SizeConfig.safeBlockVertical * 18 - 12.58,
                     width: SizeConfig.safeBlockHorizontal * 100,
                     child: RaisedButton(
-                        key: null,
-                        onPressed: () {
-                          tts.tellPress("SAVE CONTACT 2");
-                          _startTimer();
-                          if (goOrNot(1)) {}
-                        },
-                        color: const Color(0xFF266EC0),
-                        child: new Text(
-                          "SAVE CONTACT 2",
-                          style: new TextStyle(
-                              fontSize: 36.0,
-                              color: const Color(0xFFFFFFFF),
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Roboto"),
-                        )),
+                      key: null,
+                      onPressed: () {
+                        tts.tellPress("SAVE CONTACT 2");
+                        _startTimer();
+                        if (goOrNot(1)) {}
+                      },
+                      color: const Color(0xFF266EC0),
+                      child: new Text(
+                        "SAVE CONTACT 2",
+                        style: new TextStyle(
+                            fontSize: 36.0,
+                            color: const Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.w400,
+                            fontFamily: "Roboto"),
+                      ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(40.0))),
+                    ),
                   ),
                   SizedBox(
                     height: (SizeConfig.safeBlockVertical * 2),
@@ -125,21 +133,25 @@ class _SaveContactsState extends State<SaveContacts> {
                     height: SizeConfig.safeBlockVertical * 18 - 12.58,
                     width: SizeConfig.safeBlockHorizontal * 100,
                     child: RaisedButton(
-                        key: null,
-                        onPressed: () {
-                          tts.tellPress("SAVE CONTACT 3");
-                          _startTimer();
-                          if (goOrNot(2)) {}
-                        },
-                        color: const Color(0xFF266EC0),
-                        child: new Text(
-                          "SAVE CONTACT 3",
-                          style: new TextStyle(
-                              fontSize: 36.0,
-                              color: const Color(0xFFFFFFFF),
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Roboto"),
-                        )),
+                      key: null,
+                      onPressed: () {
+                        tts.tellPress("SAVE CONTACT 3");
+                        _startTimer();
+                        if (goOrNot(2)) {}
+                      },
+                      color: const Color(0xFF266EC0),
+                      child: new Text(
+                        "SAVE CONTACT 3",
+                        style: new TextStyle(
+                            fontSize: 36.0,
+                            color: const Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.w400,
+                            fontFamily: "Roboto"),
+                      ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(40.0))),
+                    ),
                   ),
                   SizedBox(
                     height: (SizeConfig.safeBlockVertical * 2),
