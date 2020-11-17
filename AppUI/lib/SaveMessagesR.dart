@@ -51,6 +51,7 @@ class _SaveMessagesState extends State<SaveMessages> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -61,6 +62,7 @@ class _SaveMessagesState extends State<SaveMessages> {
         title: 'SaveMessages_trial',
         home: Builder(
             builder: (contaxt) => Scaffold(
+                resizeToAvoidBottomPadding: false,
                 backgroundColor: Color(0xFF00B1D2),
                 appBar: new AppBar(
                   leading: IconButton(
@@ -72,8 +74,12 @@ class _SaveMessagesState extends State<SaveMessages> {
                 ),
                 body: GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    onHorizontalDragEnd: (details) {
-                      tts.tellCurrentScreen("Save Messages");
+                    onHorizontalDragUpdate: (details) {
+                      if (details.primaryDelta < -20) {
+                        tts.tellDateTime();
+                      }
+                      if (details.primaryDelta > 20)
+                        tts.tellCurrentScreen("Save Messages");
                     },
                     child: Column(children: <Widget>[
                       SizedBox(

@@ -45,6 +45,7 @@ class _SaveContactsState extends State<SaveContacts> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -54,6 +55,7 @@ class _SaveContactsState extends State<SaveContacts> {
         routes: {'/home': (context) => Home()},
         title: 'SaveContacts_trial',
         home: new Scaffold(
+            resizeToAvoidBottomPadding: false,
             backgroundColor: Color(0xFF00B1D2),
             appBar: new AppBar(
               leading: IconButton(
@@ -65,8 +67,12 @@ class _SaveContactsState extends State<SaveContacts> {
             ),
             body: GestureDetector(
                 behavior: HitTestBehavior.opaque,
-                onHorizontalDragEnd: (details) {
-                  tts.tellCurrentScreen("Save Contacts");
+                onHorizontalDragUpdate: (details) {
+                  if (details.primaryDelta < -20) {
+                    tts.tellDateTime();
+                  }
+                  if (details.primaryDelta > 20)
+                    tts.tellCurrentScreen("Save Contacts");
                 },
                 child: Column(children: <Widget>[
                   SizedBox(
