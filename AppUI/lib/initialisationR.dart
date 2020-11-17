@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ui_trial/SaveMessagesR.dart';
@@ -11,9 +9,6 @@ import 'package:ui_trial/TextToSpeech.dart';
 import 'Size_Config.dart';
 import 'dart:io' as io;
 
-
-
-
 class Initialisation extends StatefulWidget {
   io.File jsonFile;
   Initialisation({this.jsonFile});
@@ -22,7 +17,6 @@ class Initialisation extends StatefulWidget {
 }
 
 class _InitialisationState extends State<Initialisation> {
-
   io.File jsonFile;
   _InitialisationState(this.jsonFile);
 
@@ -66,6 +60,7 @@ class _InitialisationState extends State<Initialisation> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -75,12 +70,13 @@ class _InitialisationState extends State<Initialisation> {
         routes: {
           '/home': (context) => Home(),
           '/SaveContacts': (context) => SaveContacts(),
-          '/SaveFaces': (context) => SaveFaces(jsonFile:jsonFile),
+          '/SaveFaces': (context) => SaveFaces(jsonFile: jsonFile),
           '/SaveSos': (context) => SaveMessages()
         },
         title: 'initialisation_trial',
         home: Builder(
             builder: (context) => Scaffold(
+                resizeToAvoidBottomPadding: false,
                 backgroundColor: Color(0xFF00B1D2),
                 appBar: new AppBar(
                   leading: IconButton(
@@ -92,8 +88,12 @@ class _InitialisationState extends State<Initialisation> {
                 ),
                 body: GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    onHorizontalDragEnd: (details) {
-                      tts.tellCurrentScreen("Initialisation");
+                    onHorizontalDragUpdate: (details) {
+                      if (details.primaryDelta < -20) {
+                        tts.tellDateTime();
+                      }
+                      if (details.primaryDelta > 20)
+                        tts.tellCurrentScreen("Initialisation");
                     },
                     child: Column(children: <Widget>[
                       SizedBox(

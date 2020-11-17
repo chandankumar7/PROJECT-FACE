@@ -19,15 +19,114 @@ class TextToSpeech {
     await tts.speak(button);
   }
 
-  void promptInput(String string)async{
+  void promptInput(String string) async {
     setTts();
     await tts.speak(string);
   }
-  
-  void inputPlayback(String string)async{
-    var processed=string.split("");
-    processed.forEach((element) async{
+
+  void inputPlayback(String string) async {
+    var processed = string.split("");
+    processed.forEach((element) async {
       await tts.speak(element);
     });
+  }
+
+  String _getDate() {
+    String year, day, month;
+    day = DateTime.now().day.toString();
+    year = DateTime.now().year.toString();
+    switch (DateTime.now().month) {
+      case 1:
+        {
+          month = "January";
+          break;
+        }
+      case 2:
+        {
+          month = "Feburary";
+          break;
+        }
+      case 3:
+        {
+          month = "March";
+          break;
+        }
+      case 4:
+        {
+          month = "April";
+          break;
+        }
+      case 5:
+        {
+          month = "May";
+          break;
+        }
+      case 6:
+        {
+          month = "June";
+          break;
+        }
+      case 7:
+        {
+          month = "July";
+          break;
+        }
+      case 8:
+        {
+          month = "August";
+          break;
+        }
+      case 9:
+        {
+          month = "September";
+          break;
+        }
+      case 10:
+        {
+          month = "October";
+          break;
+        }
+      case 11:
+        {
+          month = "November";
+          break;
+        }
+      case 12:
+        {
+          month = "December";
+          break;
+        }
+    }
+    return day + " " + month + " " + year;
+  }
+
+  String _getTime() {
+    int hour, minutes;
+    String k;
+    if (DateTime.now().hour > 12) {
+      hour = DateTime.now().hour % 12;
+      k = "PM";
+    } else {
+      if (DateTime.now().hour == 12) {
+        hour = DateTime.now().hour;
+        k = "PM";
+      } else {
+        if (DateTime.now().hour < 12) {
+          hour = DateTime.now().hour;
+          k = "AM";
+        }
+      }
+    }
+    minutes = DateTime.now().minute;
+    return hour.toString() + "  " + minutes.toString() + k;
+  }
+
+  String _getCombined() {
+    return "The Date is" + _getDate() + "and the time is" + _getTime();
+  }
+
+  void tellDateTime() async {
+    setTts();
+    await tts.speak(_getCombined());
   }
 }

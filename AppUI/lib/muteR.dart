@@ -52,6 +52,7 @@ class _MuteState extends State<Mute> {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -62,6 +63,7 @@ class _MuteState extends State<Mute> {
         title: 'mute_trial',
         home: Builder(
             builder: (context) => Scaffold(
+                resizeToAvoidBottomPadding: false,
                 backgroundColor: Color(0xFF00B1D2),
                 appBar: new AppBar(
                   leading: IconButton(
@@ -73,8 +75,12 @@ class _MuteState extends State<Mute> {
                 ),
                 body: GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    onHorizontalDragEnd: (details) {
-                      tts.tellCurrentScreen("Mute");
+                    onHorizontalDragUpdate: (details) {
+                      if (details.primaryDelta < -20) {
+                        tts.tellDateTime();
+                      }
+                      if (details.primaryDelta > 20)
+                        tts.tellCurrentScreen("Mute");
                     },
                     child: Column(children: <Widget>[
                       SizedBox(

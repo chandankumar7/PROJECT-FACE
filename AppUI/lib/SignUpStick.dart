@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'Size_Config.dart';
 import 'homeR.dart';
 import 'package:flutter/services.dart';
 import 'package:ui_trial/TextToSpeech.dart';
@@ -44,6 +45,7 @@ class SignUpStick extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -54,6 +56,7 @@ class SignUpStick extends StatelessWidget {
         title: 'SignupStick_Trial',
         home: Builder(
             builder: (context) => Scaffold(
+                resizeToAvoidBottomPadding: false,
                 backgroundColor: Color(0xFF00B1D2),
                 appBar: new AppBar(
                   title: new Text('Set Stick Details'),
@@ -61,8 +64,12 @@ class SignUpStick extends StatelessWidget {
                 ),
                 body: GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    onHorizontalDragEnd: (details) {
-                      tts.tellCurrentScreen("Sign up");
+                    onHorizontalDragUpdate: (details) {
+                      if (details.primaryDelta < -20) {
+                        tts.tellDateTime();
+                      }
+                      if (details.primaryDelta > 20)
+                        tts.tellCurrentScreen("Sign Up");
                     },
                     child: SingleChildScrollView(
                         child: new Column(

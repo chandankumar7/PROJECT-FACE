@@ -6,9 +6,9 @@ import 'package:ui_trial/initialisationR.dart';
 import 'muteR.dart';
 import 'dart:async';
 import 'dart:io' as io;
+import 'package:path_provider/path_provider.dart';
 
 class Home extends StatefulWidget {
-
   io.File jsonFile;
   Home({this.jsonFile});
   @override
@@ -16,7 +16,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-
   io.File jsonFile;
   _HomeState(this.jsonFile);
 
@@ -57,8 +56,20 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void loadJson() async {
+    io.Directory tempDir = await getApplicationDocumentsDirectory();
+    String _embPath = tempDir.path + '/emb.json';
+    jsonFile = new io.File(_embPath);
+  }
+
   @override
   Widget build(BuildContext context) {
+    try {
+      jsonFile.exists();
+    } catch (e) {
+      loadJson();
+      print("Created File");
+    }
     SizeConfig().init(context);
     tts.tellCurrentScreen("Home");
     SystemChrome.setPreferredOrientations([
@@ -69,18 +80,24 @@ class _HomeState extends State<Home> {
     return MaterialApp(
         routes: {
           '/mute': (context) => Mute(),
-          '/initialisation': (context) => Initialisation(jsonFile:jsonFile)
+          '/initialisation': (context) => Initialisation(jsonFile: jsonFile)
         },
         title: "home_trial",
         home: Builder(
             builder: (context) => Scaffold(
+                resizeToAvoidBottomPadding: false,
                 appBar: AppBar(
                   title: Text("360 VPA"),
+                  backgroundColor: Color(0xFF1C3BC8),
                 ),
                 body: GestureDetector(
                   behavior: HitTestBehavior.opaque,
-                  onHorizontalDragEnd: (details) {
-                    tts.tellCurrentScreen("Home");
+                  onHorizontalDragUpdate: (details) {
+                    if (details.primaryDelta < -20) {
+                      tts.tellDateTime();
+                    }
+                    if (details.primaryDelta > 20)
+                      tts.tellCurrentScreen("Home");
                   },
                   child: Column(children: <Widget>[
                     Container(

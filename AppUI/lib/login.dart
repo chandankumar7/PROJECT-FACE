@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'SignUpUser.dart';
+import 'Size_Config.dart';
 import 'homeR.dart';
 import 'package:ui_trial/TextToSpeech.dart';
 import 'dart:async';
@@ -44,6 +45,7 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig().init(context);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -57,6 +59,7 @@ class Login extends StatelessWidget {
         title: 'login_trial',
         home: Builder(
             builder: (context) => Scaffold(
+                resizeToAvoidBottomPadding: false,
                 backgroundColor: Color(0xFF00B1D2),
                 appBar: new AppBar(
                   title: new Text('LOGIN'),
@@ -64,8 +67,12 @@ class Login extends StatelessWidget {
                 ),
                 body: GestureDetector(
                     behavior: HitTestBehavior.opaque,
-                    onHorizontalDragEnd: (details) {
-                      tts.tellCurrentScreen("Login");
+                    onHorizontalDragUpdate: (details) {
+                      if (details.primaryDelta < -20) {
+                        tts.tellDateTime();
+                      }
+                      if (details.primaryDelta > 20)
+                        tts.tellCurrentScreen("Login");
                     },
                     child: SingleChildScrollView(
                         child: new Column(
