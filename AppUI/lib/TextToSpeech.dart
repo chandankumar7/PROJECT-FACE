@@ -129,4 +129,9 @@ class TextToSpeech {
     setTts();
     await tts.speak(_getCombined());
   }
+
+  void tell(String content) async{
+    setTts();
+    await tts.speak(content);
+  }
 }

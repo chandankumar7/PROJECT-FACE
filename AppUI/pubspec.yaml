@@ -33,9 +33,12 @@ dependencies:
   firebase_ml_vision: ^0.6.0
   path_provider: ^1.6.11
   tflite_flutter: ^0.4.1
+  speech_to_text: ^2.7.0
   image: ^2.1.12
   image_picker: ^0.6.7+14
   flutter_swiper: ^1.1.6
+  connectivity: ^2.0.2
+  android_intent: ^0.3.7+7
   
 
 

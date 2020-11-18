@@ -1,3 +1,6 @@
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
+import 'package:android_intent/android_intent.dart';
 import 'Size_Config.dart';
 import 'TextToSpeech.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +10,8 @@ import 'muteR.dart';
 import 'dart:async';
 import 'dart:io' as io;
 import 'package:path_provider/path_provider.dart';
+import 'package:connectivity/connectivity.dart';
+
 
 class Home extends StatefulWidget {
   io.File jsonFile;
@@ -19,7 +24,11 @@ class _HomeState extends State<Home> {
   io.File jsonFile;
   _HomeState(this.jsonFile);
 
-  TextToSpeech tts = new TextToSpeech();
+  var internet=false;
+
+  final TextToSpeech tts = new TextToSpeech();
+  final SpeechToText speech = SpeechToText();
+
   final timeout = const Duration(seconds: 3);
 
   var go = [
@@ -28,6 +37,20 @@ class _HomeState extends State<Home> {
     false,
     false
   ]; //0:sos,1:mute,2:initialisation,3:navigation
+
+  void initVoiceInput()async{
+    try{
+        bool hasSpeech = await speech.initialize();
+        if(hasSpeech)
+          print("initialised");
+    }catch(e){print("Error while Initialising speech to text:"+e.toString());}
+  }
+
+ checkInternet() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) 
+        internet=true;
+  }
 
   bool goOrNot(int touch) {
     if (go[touch]) {
@@ -62,6 +85,14 @@ class _HomeState extends State<Home> {
     jsonFile = new io.File(_embPath);
   }
 
+   void _launchTurnByTurnNavigationInGoogleMaps(String location) {
+    final AndroidIntent intent = AndroidIntent(
+        action: 'action_view',
+        data: Uri.encodeFull('google.navigation:q='+location),
+        package: 'com.google.android.apps.maps');
+    intent.launch();
+  }
+
   @override
   Widget build(BuildContext context) {
     try {
@@ -70,6 +101,7 @@ class _HomeState extends State<Home> {
       loadJson();
       print("Created File");
     }
+    checkInternet();
     SizeConfig().init(context);
     tts.tellCurrentScreen("Home");
     SystemChrome.setPreferredOrientations([
@@ -170,7 +202,47 @@ class _HomeState extends State<Home> {
                               onPressed: () {
                                 tts.tellPress("Navigation");
                                 _startTimer();
-                                if (goOrNot(3)) {}
+                                if (goOrNot(3)) {
+                                  checkInternet();
+                                  if(!internet)
+                                    {
+                                      print("No Internet");
+                                      tts.tell("You dont have an active internet connection");
+                                    }
+                                  else{
+                                    tts.tell("Set your destination after the beep");
+                                    Future.delayed(Duration(seconds: 4),()async{
+                                            await initVoiceInput();
+                                            speech.listen(
+                                            onResult: (SpeechRecognitionResult result)async {
+                                                      
+                                                      tts.tell("You entered Your Destination as "+result.recognizedWords+"Say yes to confirm the destination after the beep");
+                                                      speech.cancel();
+                                                      speech.initialize();
+                                                      Future.delayed(Duration(seconds: 7),(){
+                                                          speech.listen(
+                                                        onResult:(SpeechRecognitionResult result1){
+                                                          if(result1.recognizedWords.compareTo("yes")==0)
+                                                             _launchTurnByTurnNavigationInGoogleMaps(result.recognizedWords);
+                                                          else
+                                                             print("cannot confirm");   
+                                                        },
+                                                      listenFor: Duration(seconds: 10),
+                                                      pauseFor: Duration(seconds:5),
+                                                      partialResults: false,
+                                                      listenMode: ListenMode.confirmation);
+                                                      });
+                                                    
+
+                                                    },
+                                            listenFor: Duration(seconds: 10),
+
+                                            pauseFor: Duration(seconds:5),
+                                            partialResults: false,
+                                            listenMode: ListenMode.dictation);
+                                      });
+                                  }  
+                                }
                               },
                               color: const Color(0xFF00B1D2),
                               child: new Text(

@@ -43,6 +43,7 @@ class SignUpUser extends StatelessWidget {
       timer.cancel();
     });
   }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -86,8 +87,12 @@ class SignUpUser extends StatelessWidget {
                                   tts.promptInput(nameController.text);
                               },
                               child: Column(children: <Widget>[
+
+                                SizedBox(
+                                  height:200
+                                ),
                                 new Text(
-                                  "Enter your Name",
+                                  "Enter Number ",
                                   style: new TextStyle(
                                       fontSize: 20.0,
                                       color: const Color(0xFFFFFFFF),
@@ -101,126 +106,26 @@ class SignUpUser extends StatelessWidget {
                                       color: const Color(0xFF000000),
                                       fontWeight: FontWeight.w600,
                                       fontFamily: "Roboto"),
-                                  keyboardType: TextInputType.name,
+                                  keyboardType: TextInputType.phone,
                                   onTap: () {
                                     if (nameController.text.isEmpty)
-                                      tts.promptInput("Enter your Name");
+                                      tts.promptInput("Enter your Number");
                                   },
                                   onChanged: (value) {
                                     tts.inputPlayback(value);
                                   },
                                 ),
-                              ])),
-                          GestureDetector(
-                            onDoubleTap: () {
-                              if (!usernameController.text.isEmpty)
-                                tts.promptInput(usernameController.text);
-                            },
-                            child: Column(children: <Widget>[
-                              new Text(
-                                "Enter a Username for your account",
-                                style: new TextStyle(
-                                    fontSize: 20.0,
-                                    color: const Color(0xFFFFFFFF),
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: "Roboto"),
-                              ),
-                              new TextField(
-                                controller: usernameController,
-                                style: new TextStyle(
-                                    fontSize: 25.0,
-                                    color: const Color(0xFF000000),
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: "Roboto"),
-                                onTap: () {
-                                  if (usernameController.text.isEmpty)
-                                    tts.promptInput("Enter your username");
-                                },
-                                onChanged: (value) {
-                                  tts.inputPlayback(value);
-                                },
-                              ),
-                            ]),
-                          ),
-                          GestureDetector(
-                              onDoubleTap: () {
-                                if (!passwordController.text.isEmpty)
-                                  tts.promptInput(passwordController.text);
-                              },
-                              child: Column(
-                                children: <Widget>[
-                                  new Text(
-                                    "Give a Password for your account",
-                                    style: new TextStyle(
-                                        fontSize: 20.0,
-                                        color: const Color(0xFFFFFFFF),
-                                        fontWeight: FontWeight.w400,
-                                        fontFamily: "Roboto"),
-                                  ),
-                                  new TextField(
-                                    obscureText: true,
-                                    controller: passwordController,
-                                    style: new TextStyle(
-                                        fontSize: 25.0,
-                                        color: const Color(0xFF000000),
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: "Roboto"),
-                                    keyboardType: TextInputType.number,
-                                    onTap: () {
-                                      if (passwordController.text.isEmpty)
-                                        tts.promptInput("Enter your password");
-                                    },
-                                    onChanged: (value) {
-                                      tts.inputPlayback(value);
-                                    },
-                                  ),
-                                ],
-                              )),
-                          GestureDetector(
-                            onDoubleTap: () {
-                              if (!confirmPasswordController.text.isEmpty)
-                                tts.promptInput(confirmPasswordController.text);
-                            },
-                            child: Column(children: <Widget>[
-                              new Text(
-                                "Confirm Password that you just entered",
-                                style: new TextStyle(
-                                    fontSize: 20.0,
-                                    color: const Color(0xFFFFFFFF),
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: "Roboto"),
-                              ),
-                              new TextField(
-                                obscureText: true,
-                                controller: confirmPasswordController,
-                                style: new TextStyle(
-                                    fontSize: 25.0,
-                                    color: const Color(0xFF000000),
-                                    fontWeight: FontWeight.w600,
-                                    fontFamily: "Roboto"),
-                                onTap: () {
-                                  if (confirmPasswordController.text.isEmpty)
-                                    tts.promptInput(
-                                        "Enter your password again");
-                                },
-                                onChanged: (value) {
-                                  tts.inputPlayback(value);
-                                },
-                              ),
-                            ]),
-                          ),
-                          new Padding(
-                            child: new SizedBox(
+                             SizedBox(
                               width: 210.0,
-                              height: 50.0,
-                              child: new RaisedButton(
+                              height: 50.0),
+                              
+                              RaisedButton(
                                 key: null,
                                 onPressed: () {
                                   tts.tellPress("SIGN UP");
                                   _startTimer();
                                   if (goOrNot(0)) {
-                                    Navigator.pushNamed(
-                                        context, '/SignUpStick');
+                                    Navigator.pushNamed(context, '/SignUpStick');
                                   }
                                 },
                                 color: const Color(0xFF266EC0),
@@ -236,40 +141,8 @@ class SignUpUser extends StatelessWidget {
                                     borderRadius: BorderRadius.all(
                                         Radius.circular(40.0))),
                               ),
-                            ),
-                            padding: const EdgeInsets.fromLTRB(
-                                50.0, 50.0, 50.0, 25.0),
-                          ),
-                          new Padding(
-                            child: new SizedBox(
-                              width: 210.0,
-                              height: 50.0,
-                              child: new RaisedButton(
-                                key: null,
-                                onPressed: () {
-                                  tts.tellPress("LOGIN");
-                                  _startTimer();
-                                  if (goOrNot(0)) {
-                                    Navigator.pushNamed(context, '/login');
-                                  }
-                                },
-                                color: const Color(0xFF266EC0),
-                                child: new Text(
-                                  "LOGIN",
-                                  style: new TextStyle(
-                                      fontSize: 35.0,
-                                      color: const Color(0xFFFFFFFF),
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: "Roboto"),
-                                ),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(40.0))),
-                              ),
-                            ),
-                            padding: const EdgeInsets.fromLTRB(
-                                50.0, 50.0, 50.0, 25.0),
-                          )
+                                
+                              ])),
                         ]))))));
   }
 }
