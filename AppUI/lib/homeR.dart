@@ -1,6 +1,7 @@
-import 'package:speech_to_text/speech_recognition_result.dart';
+import 'dart:convert';
+import 'package:sms/sms.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:android_intent/android_intent.dart';
+import 'package:ui_trial/utilitiesR.dart';
 import 'Size_Config.dart';
 import 'TextToSpeech.dart';
 import 'package:flutter/material.dart';
@@ -9,20 +10,24 @@ import 'package:ui_trial/initialisationR.dart';
 import 'muteR.dart';
 import 'dart:async';
 import 'dart:io' as io;
-import 'package:path_provider/path_provider.dart';
 import 'package:connectivity/connectivity.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:path_provider/path_provider.dart';
 
 
 class Home extends StatefulWidget {
-  io.File jsonFile;
-  Home({this.jsonFile});
+  io.File jsonFileFace ;
+  io.File jsonFileSos ;
+  Home({this.jsonFileFace,this.jsonFileSos });
   @override
-  _HomeState createState() => _HomeState(this.jsonFile);
+  _HomeState createState() => _HomeState(this.jsonFileFace,this.jsonFileSos);
 }
 
 class _HomeState extends State<Home> {
-  io.File jsonFile;
-  _HomeState(this.jsonFile);
+  io.File jsonFileFace ;
+  io.File jsonFileSos ;
+  Map<String,dynamic> empty_for_SOS={};
+  _HomeState(this.jsonFileFace,this.jsonFileSos);
 
   var internet=false;
 
@@ -37,20 +42,7 @@ class _HomeState extends State<Home> {
     false,
     false
   ]; //0:sos,1:mute,2:initialisation,3:navigation
-
-  void initVoiceInput()async{
-    try{
-        bool hasSpeech = await speech.initialize();
-        if(hasSpeech)
-          print("initialised");
-    }catch(e){print("Error while Initialising speech to text:"+e.toString());}
-  }
-
- checkInternet() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) 
-        internet=true;
-  }
+ 
 
   bool goOrNot(int touch) {
     if (go[touch]) {
@@ -79,29 +71,104 @@ class _HomeState extends State<Home> {
     });
   }
 
-  void loadJson() async {
+
+void createFileFace() async{
     io.Directory tempDir = await getApplicationDocumentsDirectory();
-    String _embPath = tempDir.path + '/emb.json';
-    jsonFile = new io.File(_embPath);
+    String _facePath = tempDir.path + '/face.json';
+    jsonFileFace=new io.File(_facePath);
+    print("face created");
+}
+
+void createFileSos() async{
+    io.Directory tempDir = await getApplicationDocumentsDirectory();
+    String _sosPath=tempDir.path + '/sos.json';
+    jsonFileSos= new io.File(_sosPath);
+    Map<String,dynamic> count={"count":"0"};
+    Map<String,dynamic> sosMssg={"sosMssg":""};
+    Map<String,dynamic> userFallMssg={"userFallMssg":""};
+    empty_for_SOS.addAll(count);
+    empty_for_SOS.addAll(sosMssg);
+    empty_for_SOS.addAll(userFallMssg);
+    jsonFileSos.writeAsStringSync(json.encode(empty_for_SOS));
+    print("sos created");
+}
+
+ checkInternet() async {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) 
+        internet=true;
+    else
+        internet=false;     
   }
 
-   void _launchTurnByTurnNavigationInGoogleMaps(String location) {
-    final AndroidIntent intent = AndroidIntent(
-        action: 'action_view',
-        data: Uri.encodeFull('google.navigation:q='+location),
-        package: 'com.google.android.apps.maps');
-    intent.launch();
-  }
+
+Future<String> prepareMssg() async{
+  Map<String,dynamic> data = json.decode(jsonFileSos.readAsStringSync());
+  String mssgToSend;
+  checkInternet();
+  if(internet)
+   {
+      Position pos = await GeolocatorPlatform.instance.getCurrentPosition();
+      if(data["sosMssg"].isEmpty) 
+         mssgToSend= 'Emergency! I need help!'+'My current location is http://maps.google.com/maps?q='+pos.latitude.toString()+','+pos.longitude.toString();
+      else  
+        mssgToSend= data["sosMssg"]+'. My current location is http://maps.google.com/maps?q='+pos.latitude.toString()+','+pos.longitude.toString();
+   }
+   else{
+        if(data["sosMssg"].isEmpty) 
+         mssgToSend= 'Emergency! I need help!';
+        else  
+        mssgToSend= data["sosMssg"];
+   }
+   return mssgToSend;
+  
+}
+
+ void initState(){
+    super.initState();
+    checkInternet();
+  }  
+    void send_SOS()async {
+    
+    Map<String,dynamic> data1 = json.decode(jsonFileSos.readAsStringSync());
+    var count=data1['count'];
+    String mssgToSend=await prepareMssg();
+    if(int.parse(count)==0)
+      tts.tell("No Contacts Saved. Exiting SOS");
+    else{
+     
+     print(mssgToSend);
+    // List numbers=[];
+    // data1.forEach((key, value) {
+    //   if(key.contains("number"))
+    //       numbers.add(value);  
+    // });
+    //  SmsSender sender = new SmsSender();
+    //  numbers.forEach((element) async{
+    //  String address = "+91"+element.toString();
+    //  SmsMessage result=await sender.sendSms(new SmsMessage(address, mssgToSend));
+    //  print(result.id);
+
+    //  });
+
+    }  
+
+
+    }  
+
+  
 
   @override
   Widget build(BuildContext context) {
-    try {
-      jsonFile.exists();
-    } catch (e) {
-      loadJson();
-      print("Created File");
+    try{
+      jsonFileFace.existsSync();
+    }catch(e){print("face erroe:-"+e.toString());
+    createFileFace();
     }
-    checkInternet();
+    try{
+      jsonFileSos.existsSync();
+    }catch(e){print("SOS erroe:-"+e.toString());
+    createFileSos();}
     SizeConfig().init(context);
     tts.tellCurrentScreen("Home");
     SystemChrome.setPreferredOrientations([
@@ -110,13 +177,20 @@ class _HomeState extends State<Home> {
     ]);
 
     return MaterialApp(
+        
         routes: {
-          '/mute': (context) => Mute(),
-          '/initialisation': (context) => Initialisation(jsonFile: jsonFile)
+          '/mute': (context) => Mute(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos ),
+          '/initialisation': (context) => Initialisation(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos ),
+          '/utilities':(context)=>utilities(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos )
         },
         title: "home_trial",
         home: Builder(
             builder: (context) => Scaffold(
+              floatingActionButton:FloatingActionButton(
+                onPressed: (){},
+                backgroundColor: const Color(0xFF00B1D2),
+                child: Icon(Icons.audiotrack),
+              ),
                 resizeToAvoidBottomPadding: false,
                 appBar: AppBar(
                   title: Text("360 VPA"),
@@ -146,7 +220,9 @@ class _HomeState extends State<Home> {
                                 onPressed: () {
                                   tts.tellPress("SEND  S O S");
                                   _startTimer();
-                                  if (goOrNot(0)) {}
+                                  if (goOrNot(0)) {
+                                    send_SOS();
+                                  }
                                 },
                                 color: const Color(0xFF266EC0),
                                 child: new Text(
@@ -187,7 +263,10 @@ class _HomeState extends State<Home> {
                     ),
                     SizedBox(
                         height: SizeConfig.safeBlockVertical * 1,
-                        width: SizeConfig.safeBlockHorizontal * 100),
+                        width: SizeConfig.safeBlockHorizontal * 100,  
+                        ),
+                 
+
                     Container(
                       height: SizeConfig.safeBlockVertical * 49.5 - 28,
                       width: SizeConfig.safeBlockHorizontal * 100,
@@ -200,53 +279,54 @@ class _HomeState extends State<Home> {
                           child: RaisedButton(
                               key: null,
                               onPressed: () {
-                                tts.tellPress("Navigation");
+                                tts.tellPress("Utilities");
                                 _startTimer();
                                 if (goOrNot(3)) {
-                                  checkInternet();
-                                  if(!internet)
-                                    {
-                                      print("No Internet");
-                                      tts.tell("You dont have an active internet connection");
-                                    }
-                                  else{
-                                    tts.tell("Set your destination after the beep");
-                                    Future.delayed(Duration(seconds: 4),()async{
-                                            await initVoiceInput();
-                                            speech.listen(
-                                            onResult: (SpeechRecognitionResult result)async {
+                                  Navigator.pushNamed(context, '/utilities');
+                                //   checkInternet();
+                                //   if(!internet)
+                                //     {
+                                //       print("No Internet");
+                                //       tts.tell("You dont have an active internet connection");
+                                //     }
+                                //   else{
+                                //     tts.tell("Set your destination after the beep");
+                                //     Future.delayed(Duration(seconds: 4),()async{
+                                //             await initVoiceInput();
+                                //             speech.listen(
+                                //             onResult: (SpeechRecognitionResult result)async {
                                                       
-                                                      tts.tell("You entered Your Destination as "+result.recognizedWords+"Say yes to confirm the destination after the beep");
-                                                      speech.cancel();
-                                                      speech.initialize();
-                                                      Future.delayed(Duration(seconds: 7),(){
-                                                          speech.listen(
-                                                        onResult:(SpeechRecognitionResult result1){
-                                                          if(result1.recognizedWords.compareTo("yes")==0)
-                                                             _launchTurnByTurnNavigationInGoogleMaps(result.recognizedWords);
-                                                          else
-                                                             print("cannot confirm");   
-                                                        },
-                                                      listenFor: Duration(seconds: 10),
-                                                      pauseFor: Duration(seconds:5),
-                                                      partialResults: false,
-                                                      listenMode: ListenMode.confirmation);
-                                                      });
+                                //                       tts.tell("You entered Your Destination as "+result.recognizedWords+"Say yes to confirm the destination after the beep");
+                                //                       speech.cancel();
+                                //                       speech.initialize();
+                                //                       Future.delayed(Duration(seconds: 7),(){
+                                //                           speech.listen(
+                                //                         onResult:(SpeechRecognitionResult result1){
+                                //                           if(result1.recognizedWords.compareTo("yes")==0)
+                                //                              _launchTurnByTurnNavigationInGoogleMaps(result.recognizedWords);
+                                //                           else
+                                //                              print("cannot confirm");   
+                                //                         },
+                                //                       listenFor: Duration(seconds: 10),
+                                //                       pauseFor: Duration(seconds:5),
+                                //                       partialResults: false,
+                                //                       listenMode: ListenMode.confirmation);
+                                //                       });
                                                     
 
-                                                    },
-                                            listenFor: Duration(seconds: 10),
+                                //                     },
+                                //             listenFor: Duration(seconds: 10),
 
-                                            pauseFor: Duration(seconds:5),
-                                            partialResults: false,
-                                            listenMode: ListenMode.dictation);
-                                      });
-                                  }  
-                                }
+                                //             pauseFor: Duration(seconds:5),
+                                //             partialResults: false,
+                                //             listenMode: ListenMode.dictation);
+                                //       });
+                                //   }  
+                                 }
                               },
                               color: const Color(0xFF00B1D2),
                               child: new Text(
-                                "NAVIGATION",
+                                "UTILITIES",
                                 style: new TextStyle(
                                     fontSize: 21.0,
                                     color: const Color(0xFFFFFFFF),
@@ -287,3 +367,4 @@ class _HomeState extends State<Home> {
                 ))));
   }
 }
+

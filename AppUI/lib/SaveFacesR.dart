@@ -16,16 +16,18 @@ import 'util.dart';
 import 'dart:convert';
 
 class SaveFaces extends StatefulWidget {
-  io.File jsonFile;
-  SaveFaces({@required this.jsonFile});
+  io.File jsonFileFace ;
+  io.File jsonFileSos ;
+  SaveFaces({this.jsonFileFace,this.jsonFileSos});
 
   @override
-  _SaveFacesState createState() => _SaveFacesState(this.jsonFile);
+  _SaveFacesState createState() => _SaveFacesState(this.jsonFileFace,this.jsonFileSos);
 }
 
 class _SaveFacesState extends State<SaveFaces> {
-  io.File jsonFile;
-  _SaveFacesState(this.jsonFile);
+  io.File jsonFileFace ;
+  io.File jsonFileSos ;
+  _SaveFacesState(this.jsonFileFace,this.jsonFileSos);
   TextToSpeech tts = new TextToSpeech();
   TextEditingController _textController = TextEditingController();
   var interpreter;
@@ -106,12 +108,12 @@ class _SaveFacesState extends State<SaveFaces> {
               " " +
               croppedImage.height.toString());
           var op = preProcess(croppedImage);
-          if (jsonFile.existsSync())
-            data = json.decode(jsonFile.readAsStringSync());
+          if (jsonFileFace.existsSync())
+            data = json.decode(jsonFileFace.readAsStringSync());
           data[_textController.text] = List.from(op);
-          jsonFile.writeAsStringSync(json.encode(data));
-          if (jsonFile.existsSync())
-            data1 = json.decode(jsonFile.readAsStringSync());
+          jsonFileFace.writeAsStringSync(json.encode(data));
+          if (jsonFileFace.existsSync())
+            data1 = json.decode(jsonFileFace.readAsStringSync());
         }
       }
 
@@ -164,8 +166,8 @@ class _SaveFacesState extends State<SaveFaces> {
     tts.tellCurrentScreen("Save Faces");
     return MaterialApp(
         routes: {
-          '/home': (context) => Home(jsonFile: jsonFile),
-          '/camera': (context) => cameraHome(jsonFile: jsonFile)
+          '/home': (context) => Home(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos ),
+          '/camera': (context) => cameraHome(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos)
         },
         title: 'SaveFaces_trial',
         home: Builder(

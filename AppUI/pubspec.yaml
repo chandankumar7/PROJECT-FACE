@@ -39,6 +39,9 @@ dependencies:
   flutter_swiper: ^1.1.6
   connectivity: ^2.0.2
   android_intent: ^0.3.7+7
+  contact_picker: ^0.0.2
+  sms: ^0.2.4
+  geolocator: ^6.1.7
   
 
 

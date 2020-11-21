@@ -1,19 +1,32 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
 import 'homeR.dart';
 import 'package:flutter/services.dart';
 import 'package:ui_trial/TextToSpeech.dart';
 import 'dart:async';
 import 'Size_Config.dart';
+import 'dart:io' as io;
+import 'package:speech_to_text/speech_to_text.dart';
 
 class SaveMessages extends StatefulWidget {
+   io.File jsonFileFace ;
+   io.File jsonFileSos ;
+   SaveMessages({this.jsonFileFace,this.jsonFileSos});
   @override
-  _SaveMessagesState createState() => _SaveMessagesState();
+  _SaveMessagesState createState() => _SaveMessagesState(this.jsonFileFace,this.jsonFileSos);
 }
 
 class _SaveMessagesState extends State<SaveMessages> {
+   io.File jsonFileFace ;
+   io.File jsonFileSos ;
+    _SaveMessagesState(this.jsonFileFace,this.jsonFileSos);
   TextToSpeech tts = new TextToSpeech();
+  final SpeechToText speech = SpeechToText();
   final timeout = const Duration(seconds: 3);
+   String sosMssg,userMssg; 
 
   var go = [
     false,
@@ -49,6 +62,98 @@ class _SaveMessagesState extends State<SaveMessages> {
     });
   }
 
+    Future initVoiceInput()async{
+    try{
+        bool hasSpeech = await speech.initialize();
+        if(hasSpeech)
+          print("initialised");
+    }catch(e){print("Error while Initialising speech to text:"+e.toString());}
+  }
+
+void RecordSosMssg(){
+
+ tts.tell("Set S O S Message after the beep");
+ Future.delayed(Duration(seconds: 4),()async{
+                                            await initVoiceInput();
+                                            speech.listen(
+                                            onResult: (SpeechRecognitionResult result)async {
+                                                      
+                                                      tts.tell("You entered Your Message as "+result.recognizedWords+".Say yes to confirm after the beep");
+                                                      speech.cancel();
+                                                      speech.initialize();
+                                                      Future.delayed(Duration(seconds: 7),(){
+                                                          speech.listen(
+                                                        onResult:(SpeechRecognitionResult result1){
+                                                          if(result1.recognizedWords.compareTo("yes")==0)
+                                                             {
+                                                               sosMssg=result.recognizedWords;
+                                                               speech.cancel();
+                                                                      userMssg=result.recognizedWords;
+                                                               speech.cancel();
+                                                               Map<String,dynamic> data = json.decode(jsonFileSos.readAsStringSync());
+                                                               data["sosMssg"]=sosMssg;
+                                                               jsonFileSos.writeAsStringSync(json.encode(data));
+                                                             }
+                                                          else
+                                                             print("cannot confirm");   
+                                                        },
+                                                      listenFor: Duration(seconds: 10),
+                                                      pauseFor: Duration(seconds:5),
+                                                      partialResults: false,
+                                                      listenMode: ListenMode.confirmation);
+                                                      });
+                                                    
+
+                                                    },
+                                            listenFor: Duration(seconds: 10),
+                                            pauseFor: Duration(seconds:5),
+                                            partialResults: false,
+                                            listenMode: ListenMode.dictation);
+                                      });
+          
+                                 
+}
+
+void RecordUserFallMssg(){
+  tts.tell("Set User fall Message after the beep");
+ Future.delayed(Duration(seconds: 4),()async{
+                                            await initVoiceInput();
+                                            speech.listen(
+                                            onResult: (SpeechRecognitionResult result)async {
+                                                      
+                                                      tts.tell("You entered Your Message as "+result.recognizedWords+".Say yes to confirm after the beep");
+                                                      speech.cancel();
+                                                      speech.initialize();
+                                                      Future.delayed(Duration(seconds: 7),(){
+                                                          speech.listen(
+                                                        onResult:(SpeechRecognitionResult result1){
+                                                          if(result1.recognizedWords.compareTo("yes")==0)
+                                                             {
+                                                               userMssg=result.recognizedWords;
+                                                               speech.cancel();
+                                                               Map<String,dynamic> data = json.decode(jsonFileSos.readAsStringSync());
+                                                               data["userFallMssg"]=userMssg;
+                                                               jsonFileSos.writeAsStringSync(json.encode(data));
+                                                             }
+                                                          else
+                                                             print("cannot confirm");   
+                                                        },
+                                                      listenFor: Duration(seconds: 10),
+                                                      pauseFor: Duration(seconds:5),
+                                                      partialResults: false,
+                                                      listenMode: ListenMode.confirmation);
+                                                      });
+                                                    
+
+                                                    },
+                                            listenFor: Duration(seconds: 10),
+                                            pauseFor: Duration(seconds:5),
+                                            partialResults: false,
+                                            listenMode: ListenMode.dictation);
+                                      });
+
+}
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -58,10 +163,9 @@ class _SaveMessagesState extends State<SaveMessages> {
     ]);
     tts.tellCurrentScreen("Save Message");
     return MaterialApp(
-        routes: {'/home': (context) => Home()},
+        routes: {'/home': (context) => Home(jsonFileFace:jsonFileFace,jsonFileSos:jsonFileSos)},
         title: 'SaveMessages_trial',
-        home: Builder(
-            builder: (contaxt) => Scaffold(
+        home: Builder(builder:(context)=> Scaffold(
                 resizeToAvoidBottomPadding: false,
                 backgroundColor: Color(0xFF00B1D2),
                 appBar: new AppBar(
@@ -94,7 +198,9 @@ class _SaveMessagesState extends State<SaveMessages> {
                           onPressed: () {
                             tts.tellPress("RECORD S O S MESSAGE");
                             _startTimer();
-                            if (goOrNot(0)) {}
+                            if (goOrNot(0)) {
+ RecordSosMssg();
+                            }
                           },
                           color: const Color(0xFF266EC0),
                           child: new Text(
@@ -123,7 +229,13 @@ class _SaveMessagesState extends State<SaveMessages> {
                           onPressed: () {
                             tts.tellPress("RECITE S O S MESSAGE");
                             _startTimer();
-                            if (goOrNot(1)) {}
+                            if (goOrNot(1)) {
+                                Map<String,dynamic> data = json.decode(jsonFileSos.readAsStringSync());
+                                if(data["sosMssg"].isEmpty) 
+                                  tts.tell("You have not set the S O S message");
+                                else  
+                                  tts.tell("The S O S Message set is "+data["sosMssg"]);
+                            }
                           },
                           color: const Color(0xFF266EC0),
                           child: new Text(
@@ -152,7 +264,9 @@ class _SaveMessagesState extends State<SaveMessages> {
                           onPressed: () {
                             tts.tellPress("RECORD USER FALL MESSAGE");
                             _startTimer();
-                            if (goOrNot(2)) {}
+                            if (goOrNot(2)) {
+                              RecordUserFallMssg();
+                            }
                           },
                           color: const Color(0xFF266EC0),
                           child: new Text(
@@ -181,7 +295,13 @@ class _SaveMessagesState extends State<SaveMessages> {
                             onPressed: () {
                               tts.tellPress("RECITE USER FALL MESSAGE");
                               _startTimer();
-                              if (goOrNot(3)) {}
+                              if (goOrNot(3)) {
+                                Map<String,dynamic> data = json.decode(jsonFileSos.readAsStringSync());
+                                if(data["userFallMssg"].isEmpty) 
+                                  tts.tell("You have not set the user Fall message");
+                                else  
+                                  tts.tell("The Userfall Message set is "+data["userFallMssg"]);
+                              }
                             },
                             color: const Color(0xFF266EC0),
                             child: new Text(

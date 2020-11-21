@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ui_trial/SaveContactsR.dart';
 import 'package:ui_trial/SaveMessagesR.dart';
-import 'package:ui_trial/saveContactsR.dart';
 import 'dart:async';
 import 'SaveFacesR.dart';
 import 'homeR.dart';
@@ -10,15 +10,18 @@ import 'Size_Config.dart';
 import 'dart:io' as io;
 
 class Initialisation extends StatefulWidget {
-  io.File jsonFile;
-  Initialisation({this.jsonFile});
+  io.File jsonFileFace ;
+  io.File jsonFileSos ;
+  Initialisation({this.jsonFileFace,this.jsonFileSos});
   @override
-  _InitialisationState createState() => _InitialisationState(this.jsonFile);
+  _InitialisationState createState() => _InitialisationState(this.jsonFileFace,this.jsonFileSos);
 }
 
 class _InitialisationState extends State<Initialisation> {
-  io.File jsonFile;
-  _InitialisationState(this.jsonFile);
+   io.File jsonFileFace ;
+   io.File jsonFileSos ;
+
+  _InitialisationState(this.jsonFileFace,this.jsonFileSos);
 
   TextToSpeech tts = new TextToSpeech();
 
@@ -68,14 +71,13 @@ class _InitialisationState extends State<Initialisation> {
     tts.tellCurrentScreen("Initialisation");
     return MaterialApp(
         routes: {
-          '/home': (context) => Home(),
-          '/SaveContacts': (context) => SaveContacts(),
-          '/SaveFaces': (context) => SaveFaces(jsonFile: jsonFile),
-          '/SaveSos': (context) => SaveMessages()
+          '/home': (context) => Home(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos),
+          '/SaveContacts': (context) => SaveContacts(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos),
+          '/SaveFaces': (context) => SaveFaces(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos ),
+          '/SaveSos': (context) => SaveMessages(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos )
         },
         title: 'initialisation_trial',
-        home: Builder(
-            builder: (context) => Scaffold(
+        home: Builder(builder: (context)=> Scaffold(
                 resizeToAvoidBottomPadding: false,
                 backgroundColor: Color(0xFF00B1D2),
                 appBar: new AppBar(

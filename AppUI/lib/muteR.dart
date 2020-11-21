@@ -4,14 +4,22 @@ import 'package:ui_trial/TextToSpeech.dart';
 import 'homeR.dart';
 import 'dart:async';
 import 'Size_Config.dart';
+import 'dart:io' as io;
 
 class Mute extends StatefulWidget {
+   io.File jsonFileFace ;
+   io.File jsonFileSos ;
+   Mute({this.jsonFileFace,this.jsonFileSos });
   @override
-  _MuteState createState() => _MuteState();
+  _MuteState createState() => _MuteState(this.jsonFileFace,this.jsonFileSos);
 }
 
 class _MuteState extends State<Mute> {
+   io.File jsonFileFace ;
+   io.File jsonFileSos ;
+    _MuteState(this.jsonFileFace,this.jsonFileSos);
   TextToSpeech tts = new TextToSpeech();
+
 
   final timeout = const Duration(seconds: 3);
 
@@ -59,7 +67,7 @@ class _MuteState extends State<Mute> {
     ]);
     tts.tellCurrentScreen("Mute");
     return MaterialApp(
-        routes: {'/home': (context) => Home()},
+        routes: {'/home': (context) => Home(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos)},
         title: 'mute_trial',
         home: Builder(
             builder: (context) => Scaffold(

@@ -13,16 +13,18 @@ import 'dart:convert';
 import 'package:flutter_tts/flutter_tts.dart';
 
 class cameraHome extends StatefulWidget {
-  io.File jsonFile;
-  cameraHome({this.jsonFile});
+  io.File jsonFileFace ;
+  io.File jsonFileSos ;
+  cameraHome({this.jsonFileFace,this.jsonFileSos });
 
   @override
-  _cameraHomeState createState() => _cameraHomeState(this.jsonFile);
+  _cameraHomeState createState() => _cameraHomeState(this.jsonFileFace,this.jsonFileSos);
 }
 
 class _cameraHomeState extends State<cameraHome> {
-  io.File jsonFile;
-  _cameraHomeState(this.jsonFile);
+  io.File jsonFileFace ;
+  io.File jsonFileSos ;
+  _cameraHomeState(this.jsonFileFace,this.jsonFileSos);
   FlutterTts tts = new FlutterTts();
 
   bool _isDetecting = false;
@@ -37,7 +39,7 @@ class _cameraHomeState extends State<cameraHome> {
 
   void _resetFile() {
     data = {};
-    jsonFile.deleteSync();
+    jsonFileFace  .deleteSync();
   }
 
   @override
@@ -119,7 +121,7 @@ class _cameraHomeState extends State<cameraHome> {
       print("error while loading model" + e.toString());
     }
 
-    if (jsonFile.existsSync()) data = json.decode(jsonFile.readAsStringSync());
+    if (jsonFileFace  .existsSync()) data = json.decode(jsonFileFace  .readAsStringSync());
 
     _camera.startImageStream((image) {
       if (_camera != null) {
@@ -177,8 +179,8 @@ class _cameraHomeState extends State<cameraHome> {
     SizeConfig().init(context);
     return MaterialApp(
         routes: {
-          '/saveFaces': (context) => SaveFaces(jsonFile: jsonFile),
-          '/home': (context) => Home(jsonFile: jsonFile)
+          '/saveFaces': (context) => SaveFaces(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos ),
+          '/home': (context) => Home(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos )
         },
         home: Builder(
             builder: (context) => Scaffold(
