@@ -43,6 +43,8 @@ android {
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
+
     }
 
     buildTypes {
@@ -52,7 +54,11 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+    aaptOptions {
+    noCompress "tflite"
 }
+}
+
 
 flutter {
     source '../..'
@@ -60,6 +66,10 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    api 'com.google.firebase:firebase-ml-vision-image-label-model:17.0.2'
+    api 'com.google.firebase:firebase-ml-vision-face-model:17.0.2'
+
+
 }
 
 apply plugin: 'com.google.gms.google-services'

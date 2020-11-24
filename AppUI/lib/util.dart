@@ -54,6 +54,7 @@ detect(CameraImage image,HandleDetection handleDetection,ImageRotation rotation)
   return handleDetection( FirebaseVisionImage.fromBytes(image.planes[0].bytes, buildMetaData(image, rotation)));
 }
 
+
 Float32List imageToByteListFloat32(
     imglib.Image image, int inputSize, double mean, double std) {
   var convertedBytes = Float32List(1 * inputSize * inputSize * 3);

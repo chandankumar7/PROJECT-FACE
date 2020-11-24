@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:contact_picker/contact_picker.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:sms/sms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,6 +8,7 @@ import 'package:ui_trial/TextToSpeech.dart';
 import 'dart:async';
 import 'Size_Config.dart';
 import 'homeR.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'dart:io' as io;
 import 'dart:convert';
 
@@ -24,10 +26,13 @@ class _SaveContactsState extends State<SaveContacts> {
 
    io.File jsonFileFace ;
    io.File jsonFileSos ;
-   
   _SaveContactsState(this.jsonFileFace,this.jsonFileSos);
   dynamic data={};
   Map<String, dynamic> fileContent; 
+  Permission _permission;
+  PermissionStatus _permissionStatus = PermissionStatus.undetermined;
+
+
 
   TextToSpeech tts = new TextToSpeech();
   final timeout = const Duration(seconds: 3);
@@ -156,7 +161,10 @@ child:   Column(children: <Widget>[
  
     
   }
+
+
     void pickcontacts() async {
+    requestPermission(Permission.contacts);
     Contact contact;
     try {
           contact = await _contactPicker.selectContact();
@@ -165,7 +173,7 @@ child:   Column(children: <Widget>[
     }
     print("Contact Picked");
     String name=contact.fullName;
-    String number=contact.phoneNumber.number;
+    String number=contact.phoneNumber.number.toString();
     String n;
     if(number.contains("+91"))
       {
@@ -208,6 +216,16 @@ child:   Column(children: <Widget>[
    else{
      print("max reached");
    }
+  }
+
+Future<void> requestPermission(Permission permission) async {
+    final status = await permission.request();
+
+    setState(() {
+      print(status);
+      _permissionStatus = status;
+      print(_permissionStatus);
+    });
   }
 
   @override

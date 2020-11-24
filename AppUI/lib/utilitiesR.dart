@@ -8,6 +8,8 @@ import 'dart:io' as io;
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:android_intent/android_intent.dart';
+import 'cameraHome.dart';
+import 'objectDetection.dart';
 
 
 
@@ -34,7 +36,7 @@ class _utilitiesState extends State<utilities> {
       go[touch] = false;
       return true;
     } else {
-      for (int i = 0; i < 2; i++) {
+      for (int i = 0; i < 5; i++) {
         if (i == touch)
           go[touch] = true;
         else
@@ -45,7 +47,7 @@ class _utilitiesState extends State<utilities> {
   }
 
   void cancelTouch() {
-    for (int i = 0; i < 2; i++) go[i] = false;
+    for (int i = 0; i < 5; i++) go[i] = false;
   }
 
     Future initVoiceInput()async{
@@ -80,9 +82,11 @@ class _utilitiesState extends State<utilities> {
     intent.launch();
   }
 
+
+
   var go = [
     false,
-    false];
+    false,false,false,false];
 
   void initState(){
     super.initState();
@@ -95,7 +99,9 @@ class _utilitiesState extends State<utilities> {
     tts.tellCurrentScreen("Utilities");
     return MaterialApp(
       routes: {
-        '/home':(context)=>Home(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos)
+        '/home':(context)=>Home(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos),
+        '/camera': (context) => cameraHome(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos),
+        '/objectDetection': (context) => objectDetection(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos)
       },
       home: Builder(builder: (context) => Scaffold(
         backgroundColor: Color(0xFF00B1D2),
@@ -120,7 +126,7 @@ class _utilitiesState extends State<utilities> {
                       tts.tellDateTime();
                     }
                     if (details.primaryDelta > 20)
-                      tts.tellCurrentScreen("Home");
+                      tts.tellCurrentScreen("Utilities");
                   },
                   child:Column(children: <Widget>[
                   SizedBox(
@@ -218,7 +224,100 @@ class _utilitiesState extends State<utilities> {
                           borderRadius:
                               BorderRadius.all(Radius.circular(40.0))),
                     ),
-                  )
+                  ),
+                                    SizedBox(
+                    height: (SizeConfig.safeBlockVertical * 2),
+                    width: SizeConfig.safeBlockHorizontal * 100,
+                  ),
+                  Container(
+                    height: SizeConfig.safeBlockVertical * 18 - 12.58,
+                    width: SizeConfig.safeBlockHorizontal * 100,
+                    child: RaisedButton(
+                      key: null,
+                      onPressed: () {
+                        tts.tellPress("Face Detection");
+                        _startTimer();
+                        if (goOrNot(2)) {
+                          Navigator.pushNamed(context, '/camera');
+                        }
+                      },
+                      color: const Color(0xFF266EC0),
+                      child: new Text(
+                        "Face detection",
+                        style: new TextStyle(
+                            fontSize: 36.0,
+                            color: const Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.w400,
+                            fontFamily: "Roboto"),
+                      ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(40.0))),
+                    ),
+                  ),
+                                    SizedBox(
+                    height: (SizeConfig.safeBlockVertical * 2),
+                    width: SizeConfig.safeBlockHorizontal * 100,
+                  ),
+                  Container(
+                    height: SizeConfig.safeBlockVertical * 18 - 12.58,
+                    width: SizeConfig.safeBlockHorizontal * 100,
+                    child: RaisedButton(
+                      key: null,
+                      onPressed: () {
+                        tts.tellPress("Object Detection");
+                        _startTimer();
+                        if (goOrNot(3)) {
+                         try{
+                             Navigator.pushNamed(context,'/objectDetection');
+                         }catch(e){
+                           tts.tell("You Dont have Google Lookout Installed on the Phone. Kindly Install Google lookout.");
+                           print("in catch");
+                         }
+                        }
+                      },
+                      color: const Color(0xFF266EC0),
+                      child: new Text(
+                        "Object Detection",
+                        style: new TextStyle(
+                            fontSize: 36.0,
+                            color: const Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.w400,
+                            fontFamily: "Roboto"),
+                      ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(40.0))),
+                    ),
+                  ),
+                                    SizedBox(
+                    height: (SizeConfig.safeBlockVertical * 2),
+                    width: SizeConfig.safeBlockHorizontal * 100,
+                  ),
+                  Container(
+                    height: SizeConfig.safeBlockVertical * 18 - 12.58,
+                    width: SizeConfig.safeBlockHorizontal * 100,
+                    child: RaisedButton(
+                      key: null,
+                      onPressed: () {
+                        tts.tellPress("Barcode Scanning");
+                        _startTimer();
+                        if (goOrNot(4)) {}
+                      },
+                      color: const Color(0xFF266EC0),
+                      child: new Text(
+                        "Barcode Scanning",
+                        style: new TextStyle(
+                            fontSize: 36.0,
+                            color: const Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.w400,
+                            fontFamily: "Roboto"),
+                      ),
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(40.0))),
+                    ),
+                  ),
                   ]
       )
       )

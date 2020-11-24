@@ -137,24 +137,24 @@ Future<String> prepareMssg() async{
       tts.tell("No Contacts Saved. Exiting SOS");
     else{
      
-     print(mssgToSend);
-    // List numbers=[];
-    // data1.forEach((key, value) {
-    //   if(key.contains("number"))
-    //       numbers.add(value);  
-    // });
-    //  SmsSender sender = new SmsSender();
-    //  numbers.forEach((element) async{
-    //  String address = "+91"+element.toString();
-    //  SmsMessage result=await sender.sendSms(new SmsMessage(address, mssgToSend));
-    //  print(result.id);
+      List numbers=[];
+      data1.forEach((key, value) {
+        if(key.contains("number"))
+            numbers.add(value);  
+      });
+      SmsSender sender = new SmsSender();
+      numbers.forEach((element) async{
+      String address = "+91"+element.toString();
+      SmsMessage result=await sender.sendSms(new SmsMessage(address, mssgToSend));
+      print(result.id);
 
-    //  });
-
-    }  
-
+      });
 
     }  
+
+
+    }  
+    
 
   
 
