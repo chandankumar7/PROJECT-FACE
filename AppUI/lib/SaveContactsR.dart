@@ -106,7 +106,7 @@ class _SaveContactsState extends State<SaveContacts> {
               return new Column(
                 children: <Widget>[
                   Container(
-                    height: SizeConfig.safeBlockVertical * 15,
+                    height: SizeConfig.safeBlockVertical * 9,
                     width: SizeConfig.safeBlockHorizontal * 100,
                     child: RaisedButton(
                       key: null,
@@ -128,7 +128,7 @@ class _SaveContactsState extends State<SaveContacts> {
                             new Text(
                               numbers[index],
                               style: new TextStyle(
-                                  fontSize: 15.0,
+                                  fontSize: 25.0,
                                   color: const Color(0xFFFFFFFF),
                                   fontWeight: FontWeight.w400,
                                   fontFamily: "Roboto"),
@@ -142,7 +142,7 @@ class _SaveContactsState extends State<SaveContacts> {
                     ),
                   ),
                   new Divider(
-                    height: 2.0,
+                    height: 5.0,
                   ),
                 ],
               );
@@ -253,62 +253,63 @@ class _SaveContactsState extends State<SaveContacts> {
                         tts.tellCurrentScreen("Save Contacts");
                     },
                     child: Column(children: <Widget>[
-                      Container(
-                        height: SizeConfig.safeBlockVertical * 50,
-                        width: SizeConfig.safeBlockHorizontal * 100,
-                        child: showContacts(),
-                      ),
+                      Container(height: 450, width: 360, child: showContacts()),
                       SizedBox(
-                        height: SizeConfig.safeBlockVertical * 20,
+                        height: SizeConfig.safeBlockVertical * 2,
+                        width: SizeConfig.safeBlockHorizontal * 100,
                       ),
-                      RaisedButton(
-                        key: null,
-                        onPressed: () {
-                          tts.tellPress("Save Contact");
-                          _startTimer();
-                          if (goOrNot(0)) {
-                            print("inside");
-                            pickcontacts();
-                          }
-                        },
-                        color: const Color(0xFF266EC0),
-                        child: new Text(
-                          "Save Contact",
-                          textAlign: TextAlign.center,
-                          style: new TextStyle(
-                              fontSize: 30.0,
-                              color: const Color(0xFFFFFFFF),
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Roboto"),
-                        ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(40.0))),
+                      Container(
+                          height: SizeConfig.safeBlockVertical * 8,
+                          width: SizeConfig.safeBlockHorizontal * 100,
+                          child: RaisedButton(
+                            onPressed: () {
+                              tts.tellPress("Save Contact");
+                              _startTimer();
+                              if (goOrNot(0)) {
+                                print("inside");
+                                pickcontacts();
+                              }
+                            },
+                            color: const Color(0xFF266EC0),
+                            child: Text("SAVE CONTACTS",
+                                textAlign: TextAlign.center,
+                                style: new TextStyle(
+                                    fontSize: 35.0,
+                                    color: const Color(0xFFFFFFFF),
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Roboto")),
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(40.0))),
+                          )),
+                      SizedBox(
+                        height: SizeConfig.safeBlockVertical * 2,
+                        width: SizeConfig.safeBlockHorizontal * 100,
                       ),
-                      RaisedButton(
-                        key: null,
-                        onPressed: () {
-                          tts.tellPress("Clear File");
-                          _startTimer();
-                          if (goOrNot(1)) {
-                            print("inside clear");
-                            _resetFile();
-                          }
-                        },
-                        color: const Color(0xFF266EC0),
-                        child: new Text(
-                          "Clear File",
-                          textAlign: TextAlign.center,
-                          style: new TextStyle(
-                              fontSize: 30.0,
-                              color: const Color(0xFFFFFFFF),
-                              fontWeight: FontWeight.w400,
-                              fontFamily: "Roboto"),
-                        ),
-                        shape: RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(40.0))),
-                      ),
+                      Container(
+                          height: SizeConfig.safeBlockVertical * 8,
+                          width: SizeConfig.safeBlockHorizontal * 100,
+                          child: RaisedButton(
+                            onPressed: () {
+                              tts.tellPress("Clear File");
+                              _startTimer();
+                              if (goOrNot(1)) {
+                                print("inside clear");
+                                _resetFile();
+                              }
+                            },
+                            color: const Color(0xFF266EC0),
+                            child: Text("CLEAR FILE",
+                                textAlign: TextAlign.center,
+                                style: new TextStyle(
+                                    fontSize: 35.0,
+                                    color: const Color(0xFFFFFFFF),
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Roboto")),
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(40.0))),
+                          )),
                     ])))));
   }
 }
