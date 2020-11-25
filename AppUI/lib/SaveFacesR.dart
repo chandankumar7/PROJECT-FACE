@@ -158,8 +158,62 @@ class _SaveFacesState extends State<SaveFaces> {
   }
 
   Widget showFace() {
-    Map<String, dynamic> data1 = json.decode(jsonFileFace.readAsStringSync());
-    if (data1.isEmpty)
+    if (jsonFileFace.existsSync()) {
+      Map<String, dynamic> data1 = json.decode(jsonFileFace.readAsStringSync());
+      if (data1.isEmpty)
+        return Container(
+          child: Text(
+            "No faces Saved",
+            style: TextStyle(
+                fontSize: 25.0,
+                color: const Color(0xFF000000),
+                fontWeight: FontWeight.w600,
+                fontFamily: "Roboto"),
+          ),
+        );
+      else {
+        List names = [];
+        int count = data1.length;
+        data1.forEach((key, value) {
+          names.add(key);
+        });
+        print(names);
+        return ListView.builder(
+            itemCount: count,
+            itemBuilder: (BuildContext context, int index) {
+              return new Column(
+                children: <Widget>[
+                  Container(
+                    height: SizeConfig.safeBlockVertical * 9,
+                    width: SizeConfig.safeBlockHorizontal * 100,
+                    child: RaisedButton(
+                      key: null,
+                      onPressed: () {
+                        // tts.tellPress("SAVE CONTACTS");
+                      },
+                      color: const Color(0xFF266EC0),
+                      child: Center(
+                          child: Text(
+                        names[index],
+                        style: new TextStyle(
+                            fontSize: 25.0,
+                            color: const Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.w400,
+                            fontFamily: "Roboto"),
+                      )),
+                      shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(40.0))),
+                    ),
+                  ),
+                  new Divider(
+                    height: 5.0,
+                  ),
+                ],
+              );
+            });
+      }
+    } else
       return Container(
         child: Text(
           "No faces Saved",
@@ -170,47 +224,6 @@ class _SaveFacesState extends State<SaveFaces> {
               fontFamily: "Roboto"),
         ),
       );
-    else {
-      List names = [];
-      int count = data1.length;
-      data1.forEach((key, value) {
-        names.add(key);
-      });
-      print(names);
-      return ListView.builder(
-          itemCount: count,
-          itemBuilder: (BuildContext context, int index) {
-            return new Column(
-              children: <Widget>[
-                Container(
-                  height: SizeConfig.safeBlockVertical * 9,
-                  width: SizeConfig.safeBlockHorizontal * 100,
-                  child: RaisedButton(
-                    key: null,
-                    onPressed: () {
-                      // tts.tellPress("SAVE CONTACTS");
-                    },
-                    color: const Color(0xFF266EC0),
-                    child: Center(
-                        child: Text(
-                      names[index],
-                      style: new TextStyle(
-                          fontSize: 25.0,
-                          color: const Color(0xFFFFFFFF),
-                          fontWeight: FontWeight.w400,
-                          fontFamily: "Roboto"),
-                    )),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(40.0))),
-                  ),
-                ),
-                new Divider(
-                  height: 5.0,
-                ),
-              ],
-            );
-          });
-    }
   }
 
   void clearFile() {
