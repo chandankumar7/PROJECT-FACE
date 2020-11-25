@@ -16,18 +16,19 @@ import 'util.dart';
 import 'dart:convert';
 
 class SaveFaces extends StatefulWidget {
-  io.File jsonFileFace ;
-  io.File jsonFileSos ;
-  SaveFaces({this.jsonFileFace,this.jsonFileSos});
+  io.File jsonFileFace;
+  io.File jsonFileSos;
+  SaveFaces({this.jsonFileFace, this.jsonFileSos});
 
   @override
-  _SaveFacesState createState() => _SaveFacesState(this.jsonFileFace,this.jsonFileSos);
+  _SaveFacesState createState() =>
+      _SaveFacesState(this.jsonFileFace, this.jsonFileSos);
 }
 
 class _SaveFacesState extends State<SaveFaces> {
-  io.File jsonFileFace ;
-  io.File jsonFileSos ;
-  _SaveFacesState(this.jsonFileFace,this.jsonFileSos);
+  io.File jsonFileFace;
+  io.File jsonFileSos;
+  _SaveFacesState(this.jsonFileFace, this.jsonFileSos);
   TextToSpeech tts = new TextToSpeech();
   TextEditingController _textController = TextEditingController();
   var interpreter;
@@ -41,14 +42,14 @@ class _SaveFacesState extends State<SaveFaces> {
 
   final timeout = const Duration(seconds: 3);
 
-  var go = [false]; //0:saveface
+  var go = [false, false]; //0:saveface 1:clear file
 
   bool goOrNot(int touch) {
     if (go[touch]) {
       go[touch] = false;
       return true;
     } else {
-      for (int i = 0; i < 1; i++) {
+      for (int i = 0; i < 2; i++) {
         if (i == touch)
           go[touch] = true;
         else
@@ -59,7 +60,7 @@ class _SaveFacesState extends State<SaveFaces> {
   }
 
   void cancelTouch() {
-    for (int i = 0; i < 1; i++) go[i] = false;
+    for (int i = 0; i < 2; i++) go[i] = false;
   }
 
   void _startTimer() {
@@ -156,6 +157,69 @@ class _SaveFacesState extends State<SaveFaces> {
     return output;
   }
 
+  Widget showFace() {
+    Map<String, dynamic> data1 = json.decode(jsonFileFace.readAsStringSync());
+    if (data1.isEmpty)
+      return Container(
+        child: Text(
+          "No faces Saved",
+          style: TextStyle(
+              fontSize: 25.0,
+              color: const Color(0xFF000000),
+              fontWeight: FontWeight.w600,
+              fontFamily: "Roboto"),
+        ),
+      );
+    else {
+      List names = [];
+      int count = data1.length;
+      data1.forEach((key, value) {
+        names.add(key);
+      });
+      print(names);
+      return ListView.builder(
+          itemCount: count,
+          itemBuilder: (BuildContext context, int index) {
+            return new Column(
+              children: <Widget>[
+                Container(
+                  height: SizeConfig.safeBlockVertical * 9,
+                  width: SizeConfig.safeBlockHorizontal * 100,
+                  child: RaisedButton(
+                    key: null,
+                    onPressed: () {
+                      // tts.tellPress("SAVE CONTACTS");
+                    },
+                    color: const Color(0xFF266EC0),
+                    child: Center(
+                        child: Text(
+                      names[index],
+                      style: new TextStyle(
+                          fontSize: 25.0,
+                          color: const Color(0xFFFFFFFF),
+                          fontWeight: FontWeight.w400,
+                          fontFamily: "Roboto"),
+                    )),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(40.0))),
+                  ),
+                ),
+                new Divider(
+                  height: 5.0,
+                ),
+              ],
+            );
+          });
+    }
+  }
+
+  void clearFile() {
+    var data = {};
+    jsonFileFace.writeAsStringSync(json.encode(data));
+    tts.tell("File Cleared");
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -166,8 +230,10 @@ class _SaveFacesState extends State<SaveFaces> {
     tts.tellCurrentScreen("Save Faces");
     return MaterialApp(
         routes: {
-          '/home': (context) => Home(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos ),
-          '/camera': (context) => cameraHome(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos)
+          '/home': (context) =>
+              Home(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos),
+          '/camera': (context) =>
+              cameraHome(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos)
         },
         title: 'SaveFaces_trial',
         home: Builder(
@@ -192,10 +258,7 @@ class _SaveFacesState extends State<SaveFaces> {
                         tts.tellCurrentScreen("Save Faces");
                     },
                     child: Column(children: <Widget>[
-                      Container(
-                        height: 300,
-                        child: isLoaded ? imgToShow : Icon(Icons.face_rounded),
-                      ),
+                      Container(height: 300, child: showFace()),
                       new TextField(
                         controller: _textController,
                         style: new TextStyle(
@@ -257,11 +320,14 @@ class _SaveFacesState extends State<SaveFaces> {
                         child: RaisedButton(
                           key: null,
                           onPressed: () {
-                            Navigator.pushNamed(context, '/camera');
+                            tts.tellPress("clear file");
+                            if (goOrNot(1)) {
+                              clearFile();
+                            }
                           },
                           color: const Color(0xFF266EC0),
                           child: new Text(
-                            "GO TO CAMERA",
+                            "CLEAR FILE",
                             textAlign: TextAlign.center,
                             style: new TextStyle(
                                 fontSize: 35.0,

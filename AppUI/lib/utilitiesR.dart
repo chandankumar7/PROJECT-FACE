@@ -10,6 +10,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:android_intent/android_intent.dart';
 import 'cameraHome.dart';
 import 'objectDetection.dart';
+import 'reminders.dart';
 
 class utilities extends StatefulWidget {
   io.File jsonFileFace;
@@ -99,7 +100,9 @@ class _utilitiesState extends State<utilities> {
           '/camera': (context) =>
               cameraHome(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos),
           '/objectDetection': (context) => objectDetection(
-              jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos)
+              jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos),
+          '/reminders': (context) =>
+              reminders(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos)
         },
         home: Builder(
             builder: (context) => Scaffold(
@@ -213,7 +216,9 @@ class _utilitiesState extends State<utilities> {
                           onPressed: () {
                             tts.tellPress("set Reminders");
                             _startTimer();
-                            if (goOrNot(1)) {}
+                            if (goOrNot(1)) {
+                              Navigator.pushNamed(context, '/reminders');
+                            }
                           },
                           color: const Color(0xFF266EC0),
                           child: new Text(
