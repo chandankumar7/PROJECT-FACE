@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import 'package:ui_trial/homeR.dart';
+import 'read.dart';
 import 'TextToSpeech.dart';
 import 'Size_Config.dart';
 import 'dart:async';
@@ -10,7 +11,6 @@ import 'package:connectivity/connectivity.dart';
 import 'package:android_intent/android_intent.dart';
 import 'cameraHome.dart';
 import 'objectDetection.dart';
-import 'reminders.dart';
 
 class utilities extends StatefulWidget {
   io.File jsonFileFace;
@@ -101,8 +101,8 @@ class _utilitiesState extends State<utilities> {
               cameraHome(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos),
           '/objectDetection': (context) => objectDetection(
               jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos),
-          '/reminders': (context) =>
-              reminders(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos)
+          '/read': (context) =>
+              read(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos)
         },
         home: Builder(
             builder: (context) => Scaffold(
@@ -214,11 +214,9 @@ class _utilitiesState extends State<utilities> {
                         child: RaisedButton(
                           key: null,
                           onPressed: () {
-                            tts.tellPress("set Reminders");
+                            tts.tellPress("Set Reminders");
                             _startTimer();
-                            if (goOrNot(1)) {
-                              Navigator.pushNamed(context, '/reminders');
-                            }
+                            if (goOrNot(1)) {}
                           },
                           color: const Color(0xFF266EC0),
                           child: new Text(
@@ -311,13 +309,15 @@ class _utilitiesState extends State<utilities> {
                         child: RaisedButton(
                           key: null,
                           onPressed: () {
-                            tts.tellPress("Barcode Scanning");
+                            tts.tellPress("Read Text");
                             _startTimer();
-                            if (goOrNot(4)) {}
+                            if (goOrNot(4)) {
+                              Navigator.pushNamed(context, '/read');
+                            }
                           },
                           color: const Color(0xFF266EC0),
                           child: new Text(
-                            "Barcode Scanning",
+                            "Read Text",
                             style: new TextStyle(
                                 fontSize: 36.0,
                                 color: const Color(0xFFFFFFFF),

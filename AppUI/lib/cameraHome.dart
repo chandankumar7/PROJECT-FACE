@@ -13,18 +13,19 @@ import 'dart:convert';
 import 'package:flutter_tts/flutter_tts.dart';
 
 class cameraHome extends StatefulWidget {
-  io.File jsonFileFace ;
-  io.File jsonFileSos ;
-  cameraHome({this.jsonFileFace,this.jsonFileSos });
+  io.File jsonFileFace;
+  io.File jsonFileSos;
+  cameraHome({this.jsonFileFace, this.jsonFileSos});
 
   @override
-  _cameraHomeState createState() => _cameraHomeState(this.jsonFileFace,this.jsonFileSos);
+  _cameraHomeState createState() =>
+      _cameraHomeState(this.jsonFileFace, this.jsonFileSos);
 }
 
 class _cameraHomeState extends State<cameraHome> {
-  io.File jsonFileFace ;
-  io.File jsonFileSos ;
-  _cameraHomeState(this.jsonFileFace,this.jsonFileSos);
+  io.File jsonFileFace;
+  io.File jsonFileSos;
+  _cameraHomeState(this.jsonFileFace, this.jsonFileSos);
   FlutterTts tts = new FlutterTts();
 
   bool _isDetecting = false;
@@ -36,10 +37,24 @@ class _cameraHomeState extends State<cameraHome> {
   double threshold = 1.0;
   String res;
   io.Directory tempDir;
+  List<String> detectedFaces = [];
 
   void _resetFile() {
     data = {};
-    jsonFileFace  .deleteSync();
+    jsonFileFace.deleteSync();
+  }
+
+  void giveOutput(String s) {
+    if (detectedFaces.contains(s))
+      ;
+    else {
+      detectedFaces.insert(detectedFaces.length, s);
+      print("inserted at " + detectedFaces.length.toString());
+      tts.speak(s);
+      Future.delayed(Duration(seconds: 5), () {
+        detectedFaces = [];
+      });
+    }
   }
 
   @override
@@ -79,9 +94,10 @@ class _cameraHomeState extends State<cameraHome> {
         predRes = label;
       }
     }
-    if (predRes.compareTo("NOT RECOGNIZED") == 0) {
-    } else {
-      tts.speak(predRes);
+    if (predRes.compareTo("NOT RECOGNIZED") == 0)
+      ;
+    else {
+      giveOutput(predRes);
     }
     print(currDist.toString() +
         " " +
@@ -121,7 +137,8 @@ class _cameraHomeState extends State<cameraHome> {
       print("error while loading model" + e.toString());
     }
 
-    if (jsonFileFace  .existsSync()) data = json.decode(jsonFileFace  .readAsStringSync());
+    if (jsonFileFace.existsSync())
+      data = json.decode(jsonFileFace.readAsStringSync());
 
     _camera.startImageStream((image) {
       if (_camera != null) {
@@ -179,8 +196,10 @@ class _cameraHomeState extends State<cameraHome> {
     SizeConfig().init(context);
     return MaterialApp(
         routes: {
-          '/saveFaces': (context) => SaveFaces(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos ),
-          '/home': (context) => Home(jsonFileFace : jsonFileFace,jsonFileSos: jsonFileSos )
+          '/saveFaces': (context) =>
+              SaveFaces(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos),
+          '/home': (context) =>
+              Home(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos)
         },
         home: Builder(
             builder: (context) => Scaffold(
@@ -193,60 +212,13 @@ class _cameraHomeState extends State<cameraHome> {
                         _camera.dispose();
                         Navigator.pushNamed(context, '/home');
                       }),
-                  title: new Text('Camera '),
+                  title: new Text('Object Detection'),
                   backgroundColor: Color(0xFF1C3BC8),
                 ),
-                body: Column(
-                  children: <Widget>[
-                    Container(height: 450, width: 360, child: _showCamera()),
-                    SizedBox(
-                      height: SizeConfig.safeBlockVertical * 2,
-                      width: SizeConfig.safeBlockHorizontal * 100,
-                    ),
-                    Container(
-                        height: SizeConfig.safeBlockVertical * 8,
-                        width: SizeConfig.safeBlockHorizontal * 100,
-                        child: RaisedButton(
-                          onPressed: () {
-                            _camera.dispose();
-                            Navigator.pushNamed(context, '/saveFaces');
-                          },
-                          color: const Color(0xFF266EC0),
-                          child: Text("SAVE FACE",
-                              textAlign: TextAlign.center,
-                              style: new TextStyle(
-                                  fontSize: 35.0,
-                                  color: const Color(0xFFFFFFFF),
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: "Roboto")),
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(40.0))),
-                        )),
-                    SizedBox(
-                      height: SizeConfig.safeBlockVertical * 2,
-                      width: SizeConfig.safeBlockHorizontal * 100,
-                    ),
-                    Container(
-                        height: SizeConfig.safeBlockVertical * 8,
-                        width: SizeConfig.safeBlockHorizontal * 100,
-                        child: RaisedButton(
-                          onPressed: () {
-                            _resetFile();
-                          },
-                          color: const Color(0xFF266EC0),
-                          child: Text("RESET FILE",
-                              textAlign: TextAlign.center,
-                              style: new TextStyle(
-                                  fontSize: 35.0,
-                                  color: const Color(0xFFFFFFFF),
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: "Roboto")),
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(40.0))),
-                        )),
-                  ],
+                body: Container(
+                  height: SizeConfig.safeBlockVertical * 70,
+                  width: SizeConfig.safeBlockHorizontal * 100,
+                  child: _showCamera(),
                 ))));
   }
 }
