@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/services.dart';
-import 'package:ui_trial/TextToSpeech.dart';
-import 'package:ui_trial/cameraHome.dart';
+import 'TextToSpeech.dart';
+import 'cameraHome.dart';
 import 'dart:async';
 import 'Size_Config.dart';
 import 'homeR.dart';
-import 'package:flutter/material.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:tflite_flutter/tflite_flutter.dart' as tfl;
 import 'package:image_picker/image_picker.dart';

@@ -75,13 +75,7 @@ class _objectDetectionState extends State<objectDetection> {
           threshold: 0.7,
         ).then((recognitions) {
           recognitions.forEach((element) {
-            //tts.speak(element['detectedClass'].toString() + ".");
             giveOutput(element['detectedClass']);
-
-            // print(element['detectedClass'].toString() +
-            //     "   " +
-            //     element['confidenceInClass'].toString());
-            // print(element);
           });
           _isDetecting = false;
         });
@@ -106,6 +100,16 @@ class _objectDetectionState extends State<objectDetection> {
         [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
     _initializeCamera();
     loadTfModel();
+  }
+
+  @override
+  void dispose() {
+    try {
+      _camera?.dispose();
+    } catch (err) {
+      print(err);
+    }
+    super.dispose();
   }
 
   @override

@@ -1,10 +1,7 @@
-import 'dart:math';
 import 'package:contact_picker/contact_picker.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:sms/sms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ui_trial/TextToSpeech.dart';
+import 'TextToSpeech.dart';
 import 'dart:async';
 import 'Size_Config.dart';
 import 'homeR.dart';

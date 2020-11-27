@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'Size_Config.dart';
 import 'homeR.dart';
 import 'package:flutter/services.dart';
-import 'package:ui_trial/TextToSpeech.dart';
+import 'TextToSpeech.dart';
 import 'dart:async';
 
 class SignUpStick extends StatelessWidget {

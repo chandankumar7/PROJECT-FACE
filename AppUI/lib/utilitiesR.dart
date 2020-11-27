@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:ui_trial/homeR.dart';
+import 'homeR.dart';
 import 'read.dart';
 import 'TextToSpeech.dart';
 import 'Size_Config.dart';
