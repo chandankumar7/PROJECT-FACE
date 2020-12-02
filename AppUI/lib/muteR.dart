@@ -87,7 +87,7 @@ class _MuteState extends State<Mute> {
         data['wet'] = false;
         break;
     }
-    jsonFileSos.writeAsStringSync(json.encode(data));
+    jsonFileMute.writeAsStringSync(json.encode(data));
     print("after mute " + service.toString() + " operation");
     print(data);
   }
