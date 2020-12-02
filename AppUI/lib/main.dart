@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ui_trial/SignUpUser.dart';
-import 'SaveContactsR.dart';
 import 'homeR.dart';
 
 void main() => runApp(MyApp());

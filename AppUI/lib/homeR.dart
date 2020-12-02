@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:sms/sms.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:ui_trial/utilitiesR.dart';
+import 'utilitiesR.dart';
 import 'Size_Config.dart';
 import 'TextToSpeech.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ui_trial/initialisationR.dart';
+import 'initialisationR.dart';
 import 'muteR.dart';
 import 'dart:async';
 import 'dart:io' as io;
@@ -139,6 +139,8 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     checkInternet();
+    speech.cancel();
+    speech.stop();
   }
 
   void send_SOS() async {
@@ -146,7 +148,7 @@ class _HomeState extends State<Home> {
     var count = data1['count'];
     String mssgToSend = await prepareMssg();
     if (int.parse(count) == 0)
-      tts.tell("No Contacts Saved. Exiting SOS");
+      tts.tell("No Contacts Saved. Exiting S O S");
     else {
       List numbers = [];
       data1.forEach((key, value) {
@@ -157,7 +159,14 @@ class _HomeState extends State<Home> {
         String address = "+91" + element.toString();
         SmsMessage result =
             await sender.sendSms(new SmsMessage(address, mssgToSend));
-        print(result.id);
+        result.onStateChanged.listen((state) {
+          if (state == SmsMessageState.Fail) {
+            tts.tell("S O S Message Failed due to no network");
+          } else if (state == SmsMessageState.Sending) {
+            tts.tell("Sending S O S Message ");
+          } else if (state == SmsMessageState.Sent)
+            tts.tell("S O S Message Sent");
+        });
       });
     }
   }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'SignUpUser.dart';
 import 'Size_Config.dart';
 import 'homeR.dart';
-import 'package:ui_trial/TextToSpeech.dart';
+import 'TextToSpeech.dart';
 import 'dart:async';
 
 class Login extends StatelessWidget {

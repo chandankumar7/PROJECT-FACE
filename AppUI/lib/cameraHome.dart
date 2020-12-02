@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:camera/camera.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
-import 'package:ui_trial/SaveFacesR.dart';
+import 'SaveFacesR.dart';
 import 'Size_Config.dart';
 import 'homeR.dart';
 import 'util.dart';
@@ -184,6 +184,16 @@ class _cameraHomeState extends State<cameraHome> {
         });
       }
     });
+  }
+
+  @override
+  void dispose() {
+    try {
+      _camera?.dispose();
+    } catch (err) {
+      print(err);
+    }
+    super.dispose();
   }
 
   Widget _showCamera() {

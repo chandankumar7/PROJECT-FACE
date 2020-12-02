@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ui_trial/SignUpStick.dart';
-import 'package:ui_trial/TextToSpeech.dart';
+import 'SignUpStick.dart';
+import 'TextToSpeech.dart';
 import 'Size_Config.dart';
 import 'login.dart';
 import 'dart:async';
@@ -43,7 +43,6 @@ class SignUpUser extends StatelessWidget {
       timer.cancel();
     });
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -87,10 +86,7 @@ class SignUpUser extends StatelessWidget {
                                   tts.promptInput(nameController.text);
                               },
                               child: Column(children: <Widget>[
-
-                                SizedBox(
-                                  height:200
-                                ),
+                                SizedBox(height: 200),
                                 new Text(
                                   "Enter Number ",
                                   style: new TextStyle(
@@ -115,33 +111,30 @@ class SignUpUser extends StatelessWidget {
                                     tts.inputPlayback(value);
                                   },
                                 ),
-                             SizedBox(
-                              width: 210.0,
-                              height: 50.0),
-                              
-                              RaisedButton(
-                                key: null,
-                                onPressed: () {
-                                  tts.tellPress("SIGN UP");
-                                  _startTimer();
-                                  if (goOrNot(0)) {
-                                    Navigator.pushNamed(context, '/SignUpStick');
-                                  }
-                                },
-                                color: const Color(0xFF266EC0),
-                                child: new Text(
-                                  "SIGN UP",
-                                  style: new TextStyle(
-                                      fontSize: 35.0,
-                                      color: const Color(0xFFFFFFFF),
-                                      fontWeight: FontWeight.w400,
-                                      fontFamily: "Roboto"),
+                                SizedBox(width: 210.0, height: 50.0),
+                                RaisedButton(
+                                  key: null,
+                                  onPressed: () {
+                                    tts.tellPress("SIGN UP");
+                                    _startTimer();
+                                    if (goOrNot(0)) {
+                                      Navigator.pushNamed(
+                                          context, '/SignUpStick');
+                                    }
+                                  },
+                                  color: const Color(0xFF266EC0),
+                                  child: new Text(
+                                    "SIGN UP",
+                                    style: new TextStyle(
+                                        fontSize: 35.0,
+                                        color: const Color(0xFFFFFFFF),
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: "Roboto"),
+                                  ),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(40.0))),
                                 ),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(40.0))),
-                              ),
-                                
                               ])),
                         ]))))));
   }

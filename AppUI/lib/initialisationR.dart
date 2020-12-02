@@ -2,12 +2,12 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ui_trial/SaveContactsR.dart';
-import 'package:ui_trial/SaveMessagesR.dart';
+import 'SaveContactsR.dart';
+import 'SaveMessagesR.dart';
 import 'dart:async';
 import 'SaveFacesR.dart';
 import 'homeR.dart';
-import 'package:ui_trial/TextToSpeech.dart';
+import 'TextToSpeech.dart';
 import 'Size_Config.dart';
 import 'dart:io' as io;
 
