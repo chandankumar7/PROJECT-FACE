@@ -1,7 +1,4 @@
-import 'dart:math';
 import 'package:contact_picker/contact_picker.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:sms/sms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ui_trial/TextToSpeech.dart';
@@ -37,15 +34,14 @@ class _SaveContactsState extends State<SaveContacts> {
 
   var go = [
     false,
-    false,
-  ]; //0: save contacts, 1: clear file
+  ]; //0: save contacts
 
   bool goOrNot(int touch) {
     if (go[touch]) {
       go[touch] = false;
       return true;
     } else {
-      for (int i = 0; i < 2; i++) {
+      for (int i = 0; i < 1; i++) {
         if (i == touch)
           go[touch] = true;
         else
@@ -56,7 +52,7 @@ class _SaveContactsState extends State<SaveContacts> {
   }
 
   void cancelTouch() {
-    for (int i = 0; i < 2; i++) go[i] = false;
+    for (int i = 0; i < 1; i++) go[i] = false;
   }
 
   void _startTimer() {
@@ -88,9 +84,21 @@ class _SaveContactsState extends State<SaveContacts> {
       print("inside try");
       Map<String, dynamic> data1 = json.decode(jsonFileSos.readAsStringSync());
       var count = data1['count'];
-      if (int.parse(count) == 0)
-        return Container();
-      else {
+      if (int.parse(count) == 0) {
+        tts.tell(
+            "You dont have Any Contacts saved for Sending Emergency Messages");
+        return Container(
+            child: Center(
+          child: Text(
+            "No Contacts Saved",
+            style: TextStyle(
+                fontSize: 25.0,
+                color: const Color(0xFF000000),
+                fontWeight: FontWeight.w600,
+                fontFamily: "Roboto"),
+          ),
+        ));
+      } else {
         List names = [];
         List numbers = [];
         data1.forEach((key, value) {
@@ -253,7 +261,11 @@ class _SaveContactsState extends State<SaveContacts> {
                         tts.tellCurrentScreen("Save Contacts");
                     },
                     child: Column(children: <Widget>[
-                      Container(height: 450, width: 360, child: showContacts()),
+                      SizedBox(
+                        height: SizeConfig.safeBlockVertical * 3,
+                        width: SizeConfig.safeBlockHorizontal * 100,
+                      ),
+                      Container(height: 300, width: 360, child: showContacts()),
                       SizedBox(
                         height: SizeConfig.safeBlockVertical * 2,
                         width: SizeConfig.safeBlockHorizontal * 100,
@@ -286,30 +298,6 @@ class _SaveContactsState extends State<SaveContacts> {
                         height: SizeConfig.safeBlockVertical * 2,
                         width: SizeConfig.safeBlockHorizontal * 100,
                       ),
-                      Container(
-                          height: SizeConfig.safeBlockVertical * 8,
-                          width: SizeConfig.safeBlockHorizontal * 100,
-                          child: RaisedButton(
-                            onPressed: () {
-                              tts.tellPress("Clear File");
-                              _startTimer();
-                              if (goOrNot(1)) {
-                                print("inside clear");
-                                _resetFile();
-                              }
-                            },
-                            color: const Color(0xFF266EC0),
-                            child: Text("CLEAR FILE",
-                                textAlign: TextAlign.center,
-                                style: new TextStyle(
-                                    fontSize: 35.0,
-                                    color: const Color(0xFFFFFFFF),
-                                    fontWeight: FontWeight.w400,
-                                    fontFamily: "Roboto")),
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(40.0))),
-                          )),
                     ])))));
   }
 }

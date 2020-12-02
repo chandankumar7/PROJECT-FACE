@@ -185,11 +185,6 @@ class _HomeState extends State<Home> {
         title: "home_trial",
         home: Builder(
             builder: (context) => Scaffold(
-                floatingActionButton: FloatingActionButton(
-                  onPressed: () {},
-                  backgroundColor: const Color(0xFF00B1D2),
-                  child: Icon(Icons.audiotrack),
-                ),
                 resizeToAvoidBottomPadding: false,
                 appBar: AppBar(
                   title: Text("360 VPA"),

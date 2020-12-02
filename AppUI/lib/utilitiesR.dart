@@ -107,11 +107,6 @@ class _utilitiesState extends State<utilities> {
         home: Builder(
             builder: (context) => Scaffold(
                 backgroundColor: Color(0xFF00B1D2),
-                floatingActionButton: FloatingActionButton(
-                  onPressed: () {},
-                  backgroundColor: const Color(0xFF00B1D2),
-                  child: Icon(Icons.audiotrack),
-                ),
                 resizeToAvoidBottomPadding: false,
                 appBar: AppBar(
                   leading: IconButton(

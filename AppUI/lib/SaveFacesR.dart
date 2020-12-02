@@ -42,14 +42,14 @@ class _SaveFacesState extends State<SaveFaces> {
 
   final timeout = const Duration(seconds: 3);
 
-  var go = [false, false]; //0:saveface 1:clear file
+  var go = [false]; //0:saveface
 
   bool goOrNot(int touch) {
     if (go[touch]) {
       go[touch] = false;
       return true;
     } else {
-      for (int i = 0; i < 2; i++) {
+      for (int i = 0; i < 1; i++) {
         if (i == touch)
           go[touch] = true;
         else
@@ -60,7 +60,7 @@ class _SaveFacesState extends State<SaveFaces> {
   }
 
   void cancelTouch() {
-    for (int i = 0; i < 2; i++) go[i] = false;
+    for (int i = 0; i < 1; i++) go[i] = false;
   }
 
   void _startTimer() {
@@ -160,7 +160,9 @@ class _SaveFacesState extends State<SaveFaces> {
   Widget showFace() {
     if (jsonFileFace.existsSync()) {
       Map<String, dynamic> data1 = json.decode(jsonFileFace.readAsStringSync());
-      if (data1.isEmpty)
+      if (data1.isEmpty) {
+        tts.tell(
+            "You Dont Have Any faces saved to perform face recognition. You are on Save Faces Screen.");
         return Container(
           child: Text(
             "No faces Saved",
@@ -171,7 +173,7 @@ class _SaveFacesState extends State<SaveFaces> {
                 fontFamily: "Roboto"),
           ),
         );
-      else {
+      } else {
         List names = [];
         int count = data1.length;
         data1.forEach((key, value) {
@@ -213,25 +215,29 @@ class _SaveFacesState extends State<SaveFaces> {
               );
             });
       }
-    } else
-      return Container(
-        child: Text(
-          "No faces Saved",
-          style: TextStyle(
-              fontSize: 25.0,
-              color: const Color(0xFF000000),
-              fontWeight: FontWeight.w600,
-              fontFamily: "Roboto"),
-        ),
-      );
+    } else {
+      tts.tell(
+          "You Dont Have Any faces saved to perform face recognition. You are on Save Faces Screen.");
+    }
+    return Container(
+        child: Center(
+      child: Text(
+        "No faces Saved",
+        style: TextStyle(
+            fontSize: 25.0,
+            color: const Color(0xFF000000),
+            fontWeight: FontWeight.w600,
+            fontFamily: "Roboto"),
+      ),
+    ));
   }
 
-  void clearFile() {
-    var data = {};
-    jsonFileFace.writeAsStringSync(json.encode(data));
-    tts.tell("File Cleared");
-    setState(() {});
-  }
+  // void clearFile() {
+  //   var data = {};
+  //   jsonFileFace.writeAsStringSync(json.encode(data));
+  //   tts.tell("File Cleared");
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -271,22 +277,32 @@ class _SaveFacesState extends State<SaveFaces> {
                         tts.tellCurrentScreen("Save Faces");
                     },
                     child: Column(children: <Widget>[
+                      SizedBox(
+                        height: SizeConfig.safeBlockVertical * 2,
+                        width: SizeConfig.safeBlockHorizontal * 100,
+                      ),
                       Container(height: 300, child: showFace()),
-                      new TextField(
-                        controller: _textController,
-                        style: new TextStyle(
-                            fontSize: 25.0,
-                            color: const Color(0xFF000000),
-                            fontWeight: FontWeight.w600,
-                            fontFamily: "Roboto"),
-                        keyboardType: TextInputType.name,
-                        onTap: () {
-                          if (_textController.text.isEmpty)
-                            tts.promptInput("Enter Name");
+                      GestureDetector(
+                        onDoubleTap: () {
+                          if (_textController.text.isNotEmpty)
+                            tts.promptInput(_textController.text);
                         },
-                        onChanged: (value) {
-                          tts.inputPlayback(value);
-                        },
+                        child: new TextField(
+                          controller: _textController,
+                          style: new TextStyle(
+                              fontSize: 25.0,
+                              color: const Color(0xFF000000),
+                              fontWeight: FontWeight.w600,
+                              fontFamily: "Roboto"),
+                          keyboardType: TextInputType.name,
+                          onTap: () {
+                            if (_textController.text.isEmpty)
+                              tts.promptInput("Enter Name");
+                          },
+                          onChanged: (value) {
+                            tts.inputPlayback(value);
+                          },
+                        ),
                       ),
                       SizedBox(
                         height: SizeConfig.safeBlockVertical * 2,
@@ -326,32 +342,6 @@ class _SaveFacesState extends State<SaveFaces> {
                       SizedBox(
                         height: SizeConfig.safeBlockVertical * 2,
                         width: SizeConfig.safeBlockHorizontal * 100,
-                      ),
-                      Container(
-                        height: SizeConfig.safeBlockVertical * 18 - 12.58,
-                        width: SizeConfig.safeBlockHorizontal * 100,
-                        child: RaisedButton(
-                          key: null,
-                          onPressed: () {
-                            tts.tellPress("clear file");
-                            if (goOrNot(1)) {
-                              clearFile();
-                            }
-                          },
-                          color: const Color(0xFF266EC0),
-                          child: new Text(
-                            "CLEAR FILE",
-                            textAlign: TextAlign.center,
-                            style: new TextStyle(
-                                fontSize: 35.0,
-                                color: const Color(0xFFFFFFFF),
-                                fontWeight: FontWeight.w400,
-                                fontFamily: "Roboto"),
-                          ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(40.0))),
-                        ),
                       )
                     ])))));
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'dart:io' as io;
 import 'Size_Config.dart';
 import 'TextToSpeech.dart';
@@ -8,6 +9,8 @@ import 'package:flutter/services.dart';
 import 'homeR.dart';
 import 'package:firebase_ml_vision/firebase_ml_vision.dart';
 import 'dart:async';
+import 'package:path_provider/path_provider.dart';
+import 'package:gallery_saver/gallery_saver.dart';
 
 class read extends StatefulWidget {
   io.File jsonFileFace;
@@ -26,7 +29,10 @@ class _readState extends State<read> {
   CameraLensDirection _direction = CameraLensDirection.back;
   CameraController _camera;
   List<String> words = [];
-  bool _isSpeaking = false;
+  bool _isRecognising = false;
+  final TextRecognizer _textRecognizer =
+      FirebaseVision.instance.textRecognizer();
+  ImagePicker _picker = new ImagePicker();
 
   var go = [
     false,
@@ -53,8 +59,9 @@ class _readState extends State<read> {
 
   void _startTimer() {
     Timer _timer;
-    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 10), (timer) {
       cancelTouch();
+      words = [];
       timer.cancel();
     });
   }
@@ -66,42 +73,14 @@ class _readState extends State<read> {
 
     _camera =
         CameraController(description, ResolutionPreset.low, enableAudio: false);
-    ImageRotation rotation = rotationIntToImageRotation(
-      description.sensorOrientation,
-    );
     await _camera.initialize().then((_) {
       if (!mounted) return;
       setState(() {});
     });
-    await Future.delayed(Duration(milliseconds: 500));
-    setState(() {});
-    Future.delayed(Duration(seconds: 2));
-    _camera.startImageStream((image) {
-      if (!_isDetecting) {
-        _isDetecting = true;
-        FirebaseVisionImage visionImage = FirebaseVisionImage.fromBytes(
-            image.planes[0].bytes, buildMetaData(image, rotation));
-        _textRecognizer.processImage(visionImage).then((VisionText result) {
-          for (TextBlock block in result.blocks) {
-            for (TextLine line in block.lines) {
-              for (TextElement word in line.elements) {
-                if (words.length < 30) {
-                  words.insert(words.length, word.text);
-                  print(words);
-                } else {
-                  words = [];
-                }
-              }
-            }
-          }
-        });
-      }
-      _isDetecting = false;
-    });
   }
 
   Widget _showCamera() {
-    if (_camera == null || _isSpeaking)
+    if (_camera == null || _isRecognising)
       return Center(
           child: Container(
               height: 200, width: 200, child: CircularProgressIndicator()));
@@ -109,23 +88,51 @@ class _readState extends State<read> {
       return CameraPreview(_camera);
   }
 
-  void read() {
-    if (!_isSpeaking) {
-      bool _isInside = false;
-      if (words.isEmpty) {
-        tts.tell("No Text found");
-      } else {
-        words.forEach((element) async {
-          if (!_isInside) {
-            _isInside = true;
-            tts.tell(element);
-            _isInside = false;
-          }
-        });
-        words = [];
-        _isSpeaking = false;
-      }
+  void detectText(String path) async {
+    FirebaseVisionImage img = new FirebaseVisionImage.fromFilePath(path);
+    TextRecognizer recog = FirebaseVision.instance.textRecognizer();
+    VisionText recognizedText = await recog.processImage(img);
+    tts.tell(recognizedText.text);
+
+    setState(() {
+      _isRecognising = false;
+    });
+  }
+
+  Future<String> takePicture() async {
+    if (!_camera.value.isInitialized) {
+      print('Error: select a camera first.');
+      return null;
     }
+    setState(() {
+      _isRecognising = true;
+    });
+    final io.Directory extDir = await getApplicationDocumentsDirectory();
+    final String dirPath = '${extDir.path}/Pictures/flutter_test';
+    String date_time = DateTime.now().day.toString() +
+        DateTime.now().month.toString() +
+        DateTime.now().year.toString() +
+        DateTime.now().hour.toString() +
+        DateTime.now().minute.toString() +
+        DateTime.now().second.toString() +
+        DateTime.now().millisecond.toString() +
+        DateTime.now().microsecond.toString();
+    await io.Directory(dirPath).create(recursive: true);
+    final String filePath = '$dirPath/$date_time.jpg';
+
+    if (_camera.value.isTakingPicture) {
+      // A capture is already pending, do nothing.
+      return null;
+    }
+
+    try {
+      await _camera.takePicture(filePath);
+    } on CameraException catch (e) {
+      print(e);
+      return null;
+    }
+    print(filePath);
+    detectText(filePath);
   }
 
   @override
@@ -167,29 +174,32 @@ class _readState extends State<read> {
                       child: _showCamera(),
                     ),
                     SizedBox(height: 20),
-                    RaisedButton(
-                      key: null,
-                      onPressed: () {
-                        tts.tellPress("Read Words");
-                        if (goOrNot(0)) {
-                          setState(() {});
-                          read();
-                        }
-                      },
-                      color: const Color(0xFF266EC0),
-                      child: new Text(
-                        "Read",
-                        textAlign: TextAlign.center,
-                        style: new TextStyle(
-                            fontSize: 35.0,
-                            color: const Color(0xFFFFFFFF),
-                            fontWeight: FontWeight.w400,
-                            fontFamily: "Roboto"),
-                      ),
-                      shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.all(Radius.circular(40.0))),
-                    )
+                    _isRecognising
+                        ? Container()
+                        : RaisedButton(
+                            key: null,
+                            onPressed: () {
+                              tts.tellPress("READ TEXT");
+                              if (goOrNot(0)) {
+                                takePicture();
+                              }
+                            },
+                            color: const Color(0xFF266EC0),
+                            child: Center(
+                              child: Text(
+                                "READ TEXT",
+                                textAlign: TextAlign.center,
+                                style: new TextStyle(
+                                    fontSize: 35.0,
+                                    color: const Color(0xFFFFFFFF),
+                                    fontWeight: FontWeight.w400,
+                                    fontFamily: "Roboto"),
+                              ),
+                            ),
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(40.0))),
+                          ),
                   ],
                 ))));
   }

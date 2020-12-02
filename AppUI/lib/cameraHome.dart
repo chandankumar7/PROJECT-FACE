@@ -81,7 +81,11 @@ class _cameraHomeState extends State<cameraHome> {
   }
 
   String compare(List currEmb) {
-    if (data.length == 0) return "No Face saved";
+    if (data.length == 0) {
+      tts.speak(
+          "You Dont Have Any faces saved for performing face recognition. Try Saving Face Images on Initialsation Page");
+      return "No Faces Saved";
+    }
     double minDist = 999;
     double currDist = 0.0;
     String label1;
