@@ -12,6 +12,8 @@ import 'dart:io' as io;
 import 'dart:convert';
 import 'package:flutter_tts/flutter_tts.dart';
 
+bool debugShowCheckedModeBanner = true;
+
 class cameraHome extends StatefulWidget {
   io.File jsonFileFace;
   io.File jsonFileSos;
@@ -209,6 +211,7 @@ class _cameraHomeState extends State<cameraHome> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: {
           '/saveFaces': (context) =>
               SaveFaces(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos),
@@ -226,7 +229,7 @@ class _cameraHomeState extends State<cameraHome> {
                         _camera.dispose();
                         Navigator.pushNamed(context, '/home');
                       }),
-                  title: new Text('Object Detection'),
+                  title: new Text('Face Detection'),
                   backgroundColor: Color(0xFF1C3BC8),
                 ),
                 body: Container(

@@ -1,10 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 import 'TextToSpeech.dart';
 import 'homeR.dart';
 import 'dart:async';
 import 'Size_Config.dart';
 import 'dart:io' as io;
+
+bool debugShowCheckedModeBanner = true;
 
 class Mute extends StatefulWidget {
   io.File jsonFileFace;
@@ -17,6 +22,7 @@ class Mute extends StatefulWidget {
 class _MuteState extends State<Mute> {
   io.File jsonFileFace;
   io.File jsonFileSos;
+  io.File jsonFileMute;
   _MuteState(this.jsonFileFace, this.jsonFileSos);
   TextToSpeech tts = new TextToSpeech();
 
@@ -57,15 +63,64 @@ class _MuteState extends State<Mute> {
     });
   }
 
+  void mute(int service) async {
+    io.Directory tempDir = await getApplicationDocumentsDirectory();
+    String _mutePath = tempDir.path + '/mute.json';
+    if (await io.File(_mutePath).exists()) {
+      print("Mute file opened");
+      jsonFileMute = io.File(_mutePath);
+    } else {
+      print("error");
+    }
+    Map<String, dynamic> data = json.decode(jsonFileMute.readAsStringSync());
+    switch (service) {
+      case 0:
+        data['obstacle'] = false;
+        break;
+      case 1:
+        data['elevated'] = false;
+        break;
+      case 2:
+        data['lowered'] = false;
+        break;
+      case 3:
+        data['wet'] = false;
+        break;
+    }
+    jsonFileSos.writeAsStringSync(json.encode(data));
+    print("after mute " + service.toString() + " operation");
+    print(data);
+  }
+
+  void unmute() async {
+    io.Directory tempDir = await getApplicationDocumentsDirectory();
+    String _mutePath = tempDir.path + '/mute.json';
+    if (await io.File(_mutePath).exists()) {
+      print("Mute file opened");
+      jsonFileMute = io.File(_mutePath);
+    } else {
+      print("error");
+    }
+    Map<String, dynamic> data = json.decode(jsonFileMute.readAsStringSync());
+    data['obstacle'] = true;
+    data['elevated'] = true;
+    data['lowered'] = true;
+    data['wet'] = true;
+    jsonFileMute.writeAsStringSync(json.encode(data));
+    print(data.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    mute(0);
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
     tts.tellCurrentScreen("Mute");
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: {
           '/home': (context) =>
               Home(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos)
@@ -80,7 +135,7 @@ class _MuteState extends State<Mute> {
                     icon: Icon(Icons.arrow_back_rounded, color: Colors.white),
                     onPressed: () => Navigator.pushNamed(context, '/home'),
                   ),
-                  title: new Text('Mute'),
+                  title: new Text('Mute Audio'),
                   backgroundColor: Color(0xFF1C3BC8),
                 ),
                 body: GestureDetector(
@@ -105,7 +160,9 @@ class _MuteState extends State<Mute> {
                           onPressed: () {
                             tts.tellPress("MUTE OBSTACLE");
                             _startTimer();
-                            if (goOrNot(0)) {}
+                            if (goOrNot(0)) {
+                              mute(0);
+                            }
                           },
                           color: const Color(0xFF266EC0),
                           child: new Text(
@@ -134,7 +191,9 @@ class _MuteState extends State<Mute> {
                           onPressed: () {
                             tts.tellPress("MUTE ELEVATED SURFACE");
                             _startTimer();
-                            if (goOrNot(1)) {}
+                            if (goOrNot(1)) {
+                              mute(1);
+                            }
                           },
                           color: const Color(0xFF266EC0),
                           child: new Text(
@@ -163,7 +222,9 @@ class _MuteState extends State<Mute> {
                           onPressed: () {
                             tts.tellPress("MUTE LOWERED SURFACE");
                             _startTimer();
-                            if (goOrNot(2)) {}
+                            if (goOrNot(2)) {
+                              mute(2);
+                            }
                           },
                           color: const Color(0xFF266EC0),
                           child: new Text(
@@ -192,7 +253,9 @@ class _MuteState extends State<Mute> {
                           onPressed: () {
                             tts.tellPress("MUTE WET SURFACE");
                             _startTimer();
-                            if (goOrNot(3)) {}
+                            if (goOrNot(3)) {
+                              mute(3);
+                            }
                           },
                           color: const Color(0xFF266EC0),
                           child: new Text(
@@ -221,7 +284,9 @@ class _MuteState extends State<Mute> {
                             onPressed: () {
                               tts.tellPress("UNMUTE ALL");
                               _startTimer();
-                              if (goOrNot(4)) {}
+                              if (goOrNot(4)) {
+                                unmute();
+                              }
                             },
                             color: const Color(0xFF266EC0),
                             child: new Text(

@@ -14,6 +14,8 @@ import 'package:connectivity/connectivity.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:path_provider/path_provider.dart';
 
+bool debugShowCheckedModeBanner = true;
+
 class Home extends StatefulWidget {
   io.File jsonFileFace;
   io.File jsonFileSos;
@@ -25,7 +27,9 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   io.File jsonFileFace;
   io.File jsonFileSos;
+  io.File jsonFileMute;
   Map<String, dynamic> empty_for_SOS = {};
+  Map<String, dynamic> empty_for_Mute = {};
   _HomeState(this.jsonFileFace, this.jsonFileSos);
 
   var internet = false;
@@ -97,6 +101,27 @@ class _HomeState extends State<Home> {
       empty_for_SOS.addAll(userFallMssg);
       jsonFileSos.writeAsStringSync(json.encode(empty_for_SOS));
       print("sos file created");
+    }
+  }
+
+  void checkFileMute() async {
+    io.Directory tempDir = await getApplicationDocumentsDirectory();
+    String _mutePath = tempDir.path + '/mute.json';
+    if (await io.File(_mutePath).exists()) {
+      print("Mute file Exists");
+      jsonFileMute = io.File(_mutePath);
+    } else {
+      jsonFileMute = new io.File(_mutePath);
+      Map<String, dynamic> o = {"obstacle": "true"};
+      Map<String, dynamic> e = {"elevated": "true"};
+      Map<String, dynamic> l = {"lowered": "true"};
+      Map<String, dynamic> w = {"wet": "true"};
+      empty_for_Mute.addAll(o);
+      empty_for_Mute.addAll(e);
+      empty_for_Mute.addAll(l);
+      empty_for_Mute.addAll(w);
+      jsonFileMute.writeAsStringSync(json.encode(empty_for_Mute));
+      print("Mute file created");
     }
   }
 
@@ -175,6 +200,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     checkFileFace();
     checkFileSos();
+    checkFileMute();
     SizeConfig().init(context);
     tts.tellCurrentScreen("Home");
     SystemChrome.setPreferredOrientations([
@@ -183,6 +209,7 @@ class _HomeState extends State<Home> {
     ]);
 
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: {
           '/mute': (context) =>
               Mute(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos),
@@ -247,7 +274,7 @@ class _HomeState extends State<Home> {
                             child: RaisedButton(
                                 key: null,
                                 onPressed: () {
-                                  tts.tellPress("Mute");
+                                  tts.tellPress("Mute Audio");
                                   _startTimer();
                                   if (goOrNot(1)) {
                                     Navigator.pushNamed(context, '/mute');

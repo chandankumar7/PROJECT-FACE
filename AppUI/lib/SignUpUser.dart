@@ -6,6 +6,8 @@ import 'Size_Config.dart';
 import 'login.dart';
 import 'dart:async';
 
+bool debugShowCheckedModeBanner = true;
+
 class SignUpUser extends StatelessWidget {
   TextEditingController nameController = new TextEditingController();
   TextEditingController usernameController = new TextEditingController();
@@ -53,6 +55,7 @@ class SignUpUser extends StatelessWidget {
     ]);
     tts.tellCurrentScreen("Sign up");
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: {
           '/login': (context) => Login(),
           '/SignUpStick': (context) => SignUpStick()

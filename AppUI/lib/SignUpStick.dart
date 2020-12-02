@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 import 'TextToSpeech.dart';
 import 'dart:async';
 
+bool debugShowCheckedModeBanner = true;
+
 class SignUpStick extends StatelessWidget {
   TextEditingController sticknameController = new TextEditingController();
   TextEditingController stickPasswordController = new TextEditingController();
@@ -52,6 +54,7 @@ class SignUpStick extends StatelessWidget {
     ]);
     tts.tellCurrentScreen("Sign up");
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: {'/home': (context) => Home()},
         title: 'SignupStick_Trial',
         home: Builder(

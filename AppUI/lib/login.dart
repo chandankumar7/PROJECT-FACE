@@ -6,6 +6,8 @@ import 'homeR.dart';
 import 'TextToSpeech.dart';
 import 'dart:async';
 
+bool debugShowCheckedModeBanner = true;
+
 class Login extends StatelessWidget {
   TextToSpeech tts = new TextToSpeech();
 
@@ -52,6 +54,7 @@ class Login extends StatelessWidget {
     ]);
     tts.tellCurrentScreen("Log in");
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: {
           '/home': (context) => Home(),
           '/signup': (context) => SignUpUser()

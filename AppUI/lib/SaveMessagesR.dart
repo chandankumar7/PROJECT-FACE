@@ -9,6 +9,8 @@ import 'Size_Config.dart';
 import 'dart:io' as io;
 import 'package:speech_to_text/speech_to_text.dart';
 
+bool debugShowCheckedModeBanner = true;
+
 class SaveMessages extends StatefulWidget {
   io.File jsonFileFace;
   io.File jsonFileSos;
@@ -172,6 +174,7 @@ class _SaveMessagesState extends State<SaveMessages> {
     ]);
     tts.tellCurrentScreen("Save Message");
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: {
           '/home': (context) =>
               Home(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos)

@@ -12,6 +12,8 @@ import 'dart:async';
 import 'package:path_provider/path_provider.dart';
 import 'package:gallery_saver/gallery_saver.dart';
 
+bool debugShowCheckedModeBanner = true;
+
 class read extends StatefulWidget {
   io.File jsonFileFace;
   io.File jsonFileSos;
@@ -92,8 +94,14 @@ class _readState extends State<read> {
     FirebaseVisionImage img = new FirebaseVisionImage.fromFilePath(path);
     TextRecognizer recog = FirebaseVision.instance.textRecognizer();
     VisionText recognizedText = await recog.processImage(img);
-    tts.tell(recognizedText.text);
-
+    if (recognizedText.text.isEmpty)
+      tts.tell("No Recognisable Text");
+    else {
+      tts.tell(recognizedText.text);
+      print(recognizedText.text);
+    }
+    var dir = io.Directory(path);
+    dir.deleteSync(recursive: true);
     setState(() {
       _isRecognising = false;
     });
@@ -148,6 +156,7 @@ class _readState extends State<read> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: {
           '/home': (context) =>
               Home(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos)

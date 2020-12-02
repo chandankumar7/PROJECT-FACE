@@ -8,6 +8,8 @@ import 'package:camera/camera.dart';
 import 'package:tflite/tflite.dart' as tfl;
 import 'util.dart';
 
+bool debugShowCheckedModeBanner = true;
+
 class objectDetection extends StatefulWidget {
   io.File jsonFileFace;
   io.File jsonFileSos;
@@ -116,6 +118,7 @@ class _objectDetectionState extends State<objectDetection> {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: {
           '/home': (context) =>
               Home(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos)

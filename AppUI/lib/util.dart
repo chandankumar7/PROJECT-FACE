@@ -5,20 +5,18 @@ import 'dart:typed_data';
 import 'package:image/image.dart' as imglib;
 import 'dart:math';
 
-
 typedef HandleDetection = Future<dynamic> Function(FirebaseVisionImage image);
 var interpreter;
 
-
- Future<CameraDescription> getCamera(CameraLensDirection dir) async {
+Future<CameraDescription> getCamera(CameraLensDirection dir) async {
   return await availableCameras().then(
     (List<CameraDescription> cameras) => cameras.firstWhere(
       (CameraDescription camera) => camera.lensDirection == dir,
     ),
   );
- }
+}
 
- ImageRotation rotationIntToImageRotation(int rotation) {
+ImageRotation rotationIntToImageRotation(int rotation) {
   switch (rotation) {
     case 0:
       return ImageRotation.rotation0;
@@ -32,7 +30,8 @@ var interpreter;
   }
 }
 
-FirebaseVisionImageMetadata buildMetaData( CameraImage image, ImageRotation rotation){
+FirebaseVisionImageMetadata buildMetaData(
+    CameraImage image, ImageRotation rotation) {
   return FirebaseVisionImageMetadata(
     rawFormat: image.format.raw,
     size: Size(image.width.toDouble(), image.height.toDouble()),
@@ -49,11 +48,11 @@ FirebaseVisionImageMetadata buildMetaData( CameraImage image, ImageRotation rota
   );
 }
 
-
-detect(CameraImage image,HandleDetection handleDetection,ImageRotation rotation)async{
-  return handleDetection( FirebaseVisionImage.fromBytes(image.planes[0].bytes, buildMetaData(image, rotation)));
+detect(CameraImage image, HandleDetection handleDetection,
+    ImageRotation rotation) async {
+  return handleDetection(FirebaseVisionImage.fromBytes(
+      image.planes[0].bytes, buildMetaData(image, rotation)));
 }
-
 
 Float32List imageToByteListFloat32(
     imglib.Image image, int inputSize, double mean, double std) {
@@ -78,4 +77,3 @@ double euclideanDistance(List e1, List e2) {
   }
   return sqrt(sum);
 }
-

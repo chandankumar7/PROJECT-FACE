@@ -13,6 +13,8 @@ import 'dart:io' as io;
 import 'util.dart';
 import 'dart:convert';
 
+bool debugShowCheckedModeBanner = true;
+
 class SaveFaces extends StatefulWidget {
   io.File jsonFileFace;
   io.File jsonFileSos;
@@ -246,6 +248,7 @@ class _SaveFacesState extends State<SaveFaces> {
     ]);
     tts.tellCurrentScreen("Save Faces");
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: {
           '/home': (context) =>
               Home(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos),

@@ -12,6 +12,8 @@ import 'package:android_intent/android_intent.dart';
 import 'cameraHome.dart';
 import 'objectDetection.dart';
 
+bool debugShowCheckedModeBanner = true;
+
 class utilities extends StatefulWidget {
   io.File jsonFileFace;
   io.File jsonFileSos;
@@ -94,6 +96,7 @@ class _utilitiesState extends State<utilities> {
     SizeConfig().init(context);
     tts.tellCurrentScreen("Utilities");
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: {
           '/home': (context) =>
               Home(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos),
@@ -187,7 +190,7 @@ class _utilitiesState extends State<utilities> {
                           },
                           color: const Color(0xFF266EC0),
                           child: new Text(
-                            "Navigation",
+                            "NAVIGATION",
                             style: new TextStyle(
                                 fontSize: 36.0,
                                 color: const Color(0xFFFFFFFF),
@@ -215,7 +218,7 @@ class _utilitiesState extends State<utilities> {
                           },
                           color: const Color(0xFF266EC0),
                           child: new Text(
-                            "Reminders",
+                            "REMINDERS",
                             style: new TextStyle(
                                 fontSize: 36.0,
                                 color: const Color(0xFFFFFFFF),
@@ -245,7 +248,7 @@ class _utilitiesState extends State<utilities> {
                           },
                           color: const Color(0xFF266EC0),
                           child: new Text(
-                            "Face detection",
+                            "FACE DETECTION",
                             style: new TextStyle(
                                 fontSize: 36.0,
                                 color: const Color(0xFFFFFFFF),
@@ -282,9 +285,9 @@ class _utilitiesState extends State<utilities> {
                           },
                           color: const Color(0xFF266EC0),
                           child: new Text(
-                            "Object Detection",
+                            "OBJECT DETECTION",
                             style: new TextStyle(
-                                fontSize: 36.0,
+                                fontSize: 34.0,
                                 color: const Color(0xFFFFFFFF),
                                 fontWeight: FontWeight.w400,
                                 fontFamily: "Roboto"),
@@ -304,7 +307,7 @@ class _utilitiesState extends State<utilities> {
                         child: RaisedButton(
                           key: null,
                           onPressed: () {
-                            tts.tellPress("Read Text");
+                            tts.tellPress("Read text");
                             _startTimer();
                             if (goOrNot(4)) {
                               Navigator.pushNamed(context, '/read');
@@ -312,7 +315,7 @@ class _utilitiesState extends State<utilities> {
                           },
                           color: const Color(0xFF266EC0),
                           child: new Text(
-                            "Read Text",
+                            "READ TEXT",
                             style: new TextStyle(
                                 fontSize: 36.0,
                                 color: const Color(0xFFFFFFFF),

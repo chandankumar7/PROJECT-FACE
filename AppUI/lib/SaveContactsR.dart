@@ -9,6 +9,8 @@ import 'package:permission_handler/permission_handler.dart';
 import 'dart:io' as io;
 import 'dart:convert';
 
+bool debugShowCheckedModeBanner = true;
+
 class SaveContacts extends StatefulWidget {
   io.File jsonFileFace;
   io.File jsonFileSos;
@@ -234,6 +236,7 @@ class _SaveContactsState extends State<SaveContacts> {
     ]);
     tts.tellCurrentScreen("Save Contacts");
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: {
           '/home': (context) =>
               Home(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos)

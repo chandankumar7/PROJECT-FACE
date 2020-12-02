@@ -11,6 +11,8 @@ import 'TextToSpeech.dart';
 import 'Size_Config.dart';
 import 'dart:io' as io;
 
+bool debugShowCheckedModeBanner = true;
+
 class Initialisation extends StatefulWidget {
   io.File jsonFileFace;
   io.File jsonFileSos;
@@ -88,6 +90,7 @@ class _InitialisationState extends State<Initialisation> {
     ]);
     tts.tellCurrentScreen("Initialisation");
     return MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: {
           '/home': (context) =>
               Home(jsonFileFace: jsonFileFace, jsonFileSos: jsonFileSos),
